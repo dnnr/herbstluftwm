@@ -32,9 +32,9 @@ jobs:
         - name: "Ubuntu 14.04, clang-5"
           dist: trusty
           before_install: CC=clang-5.0 CXX=clang++-5.0
-        - name: "Ubuntu 16.04, gcc-5.4"
+        - name: "Ubuntu 16.04, gcc-5"
           dist: xenial
-          before_install: CC=gcc-5.4 CXX=g++-5.4
+          before_install: CC=gcc-5 CXX=g++-5
         - name: "Ubuntu 16.04, gcc-7"
           dist: xenial
           before_install: CC=gcc-7 CXX=g++-7
