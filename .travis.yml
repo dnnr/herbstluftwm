@@ -38,6 +38,10 @@ jobs:
         - name: "Ubuntu 16.04, gcc-7"
           dist: xenial
           before_install: CC=gcc-7 CXX=g++-7
+          addons:
+              apt:
+                  packages:
+                      - g++-7
         - name: "Ubuntu 16.04, clang-7, run tests"
           dist: xenial
           before_install: CC=clang-7 CXX=clang++-7
