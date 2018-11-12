@@ -32,9 +32,11 @@ jobs:
           dist: trusty
           before_install: CC=gcc-4.8 CXX=g++-4.8
 
-        - name: "Ubuntu 14.04, clang-5"
+        - name: "Ubuntu 14.04, clang-3.8"
+          # Note: Travis provides clang-5.0.0 on trusty, but clang-3.8 is the
+          # most recent version provided by Ubuntu, so we use that one.
           dist: trusty
-          before_install: CC=/usr/local/clang/bin/clang-5.0 CXX=/usr/local/clang/bin/clang++-5.0
+          before_install: CC=clang-3.8 CXX=clang-3.8
 
         - name: "Ubuntu 16.04, gcc-5"
           dist: xenial
