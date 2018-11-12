@@ -43,6 +43,7 @@ jobs:
                       - clang-3.9
 
         - name: "Ubuntu 16.04, gcc-5"
+          # Note: On xenial, gcc-5 is the most recent GCC that is officially available.
           dist: xenial
           before_install: CC=gcc-5 CXX=g++-5
 
