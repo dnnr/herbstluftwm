@@ -7,7 +7,7 @@ install:
     - sudo apt-get -y -q install dzen2
     - apt-cache search '^clang-[0-9]'
     - clang --version
-    - find /usr/local/clang*/bin -name 'clang-[0-9]*'
+    - find /usr/local/clang*/bin -type f
     - apt-cache search '^gcc-[0-9]'
     - gcc --version
 
