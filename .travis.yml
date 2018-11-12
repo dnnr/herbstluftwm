@@ -62,15 +62,15 @@ jobs:
                   packages:
                       - g++-8
 
-        - name: "Ubuntu 16.04, clang-7, run tests"
+        - name: "Ubuntu 16.04, clang-6, run tests"
           dist: xenial
-          before_install: CC=clang-7 CXX=clang++-7
+          before_install: CC=clang-6 CXX=clang++-6
           addons:
               apt:
                   sources:
-                      - llvm-toolchain-trusty-7
+                      - llvm-toolchain-trusty-6
                   packages:
-                      - clang-7
+                      - clang-6
                       - xterm
                       - tox
           script:
