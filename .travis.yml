@@ -78,7 +78,10 @@ jobs:
 
         - name: "Ubuntu 16.04, clang-6"
           dist: xenial
-          before_install: CC=clang-6.0 CXX=clang++-6.0
+          before_install:
+              - CC=clang-6.0 CXX=clang++-6.0
+              # Disable warning until its causes are fixed:
+              - export CXXFLAGS="-Wno-inconsistent-missing-override"
           addons:
               apt:
                   sources:
@@ -88,7 +91,10 @@ jobs:
 
         - name: "Ubuntu 16.04, clang-7"
           dist: xenial
-          before_install: CC=clang-7 CXX=clang++-7
+          before_install:
+              - CC=clang-7 CXX=clang++-7
+              # Disable warning until its causes are fixed:
+              - export CXXFLAGS="-Wno-inconsistent-missing-override"
           addons:
               apt:
                   sources:
