@@ -72,7 +72,7 @@ jobs:
           addons:
               apt:
                   sources:
-                      - llvm-toolchain-trusty-6
+                      - llvm-toolchain-xenial-6.0
                   packages:
                       - clang-6
                       - xterm
