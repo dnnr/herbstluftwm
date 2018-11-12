@@ -48,6 +48,16 @@ jobs:
                   packages:
                       - g++-7
 
+        - name: "Ubuntu 16.04, gcc-8"
+          dist: xenial
+          before_install: CC=gcc-8 CXX=g++-8
+          addons:
+              apt:
+                  sources:
+                      - ubuntu-toolchain-r-test
+                  packages:
+                      - g++-8
+
         - name: "Ubuntu 16.04, clang-7, run tests"
           dist: xenial
           before_install: CC=clang-7 CXX=clang++-7
