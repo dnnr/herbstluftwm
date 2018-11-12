@@ -38,7 +38,8 @@ jobs:
           dist: trusty
           before_install:
               - CC=clang-3.9 CXX=clang++-3.9
-              - export CXXFLAGS=-Wno-deprecated-register
+              # Disable some warnings until their causes are fixed:
+              - export CXXFLAGS="-Wno-deprecated-register -Wno-inconsistent-missing-override"
           addons:
               apt:
                   packages:
