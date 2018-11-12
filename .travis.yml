@@ -30,10 +30,10 @@ jobs:
           dist: trusty
           before_install: CC=gcc-4.8 CXX=g++-4.8
         - name: "Ubuntu 14.04, clang-5"
-          addons:
-              apt:
-                  packages:
-                      - clang-5.0
+          # addons:
+              # apt:
+                  # packages:
+                      # - clang-5.0
           dist: trusty
           before_install: CC=clang-5 CXX=clang++-5
         - name: "Ubuntu 16.04, gcc-5"
