@@ -82,3 +82,13 @@ jobs:
               - echo $CC / $CXX
               - make -j2
               - tox
+
+        - name: "Ubuntu 16.04, clang-7"
+          dist: xenial
+          before_install: CC=clang-7 CXX=clang++-7
+          addons:
+              apt:
+                  sources:
+                      - llvm-toolchain-xenial-7
+                  packages:
+                      - clang-7
