@@ -27,6 +27,8 @@ script:
 jobs:
     include:
         - name: "Ubuntu 14.04, gcc-4.8"
+          # Note: Travis provides gcc-5.4 on trusty, but gcc-4.8 is the most
+          # recent version provided by Ubuntu, so we use that one.
           dist: trusty
           before_install: CC=gcc-4.8 CXX=g++-4.8
 
