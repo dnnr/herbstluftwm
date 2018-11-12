@@ -69,7 +69,7 @@ jobs:
 
         - name: "Ubuntu 16.04, clang-6, run tests"
           dist: xenial
-          before_install: CC=clang-6 CXX=clang++-6
+          before_install: CC=clang-6.0 CXX=clang++-6.0
           addons:
               apt:
                   sources:
