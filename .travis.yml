@@ -23,10 +23,7 @@ jobs:
     include:
         - name: "Ubuntu 14.04, gcc-4.8"
           dist: trusty
-          env: CC=gcc-4.8 CXX=g++-4.8
-          before_install:
-              - TRAVIS_COMPILER=foo
-              - CXX=bar
+          before_install: CC=gcc-4.8 CXX=g++-4.8
         - name: "Ubuntu 14.04, clang-5"
           dist: trusty
           env: CC=clang-5 CXX=clang++-5
