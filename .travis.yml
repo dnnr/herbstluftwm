@@ -26,17 +26,16 @@ jobs:
           before_install: CC=gcc-4.8 CXX=g++-4.8
         - name: "Ubuntu 14.04, clang-5"
           dist: trusty
-          env: CC=clang-5 CXX=clang++-5
+          before_install: CC=clang-5 CXX=clang++-5
         - name: "Ubuntu 16.04, gcc-5"
           dist: xenial
-          env: CC=gcc-5 CXX=g++-5
+          before_install: CC=gcc-5 CXX=g++-5
         - name: "Ubuntu 16.04, gcc-7"
           dist: xenial
-          env: CC=gcc-7 CXX=g++-7
+          before_install: CC=gcc-7 CXX=g++-7
         - name: "Ubuntu 16.04, clang-7, run tests"
           dist: xenial
-          # env: CC=clang-7 CXX=do-you-even-care
-          env: TRAVIS_COMPILER=clang-7
+          before_install: CC=clang-7 CXX=do-you-even-care
           addons:
               apt:
                   packages:
