@@ -36,7 +36,7 @@ jobs:
           # Note: Travis provides clang-5.0.0 on trusty, but clang-3.9 is the
           # most recent version provided by Ubuntu, so we use that one.
           dist: trusty
-          before_install: CC=clang-3.9 CXX=clang-3.8
+          before_install: CC=clang-3.9 CXX=clang-3.9
           addons:
               apt:
                   packages:
