@@ -34,7 +34,7 @@ jobs:
           env: CC=gcc-7 CXX=g++-7
         - name: "Ubuntu 16.04, clang-7, run tests"
           dist: xenial
-          env: CC=clang-7 CXX=clang++-7
+          env: CC=clang-7 CXX=do-you-even-care
           addons:
               apt:
                   packages:
