@@ -5,11 +5,6 @@ install:
     - sudo apt-get -y -q update
     - sudo apt-get -y -q build-dep herbstluftwm
     - sudo apt-get -y -q install dzen2
-    - apt-cache search '^clang-[0-9]'
-    - clang --version
-    - find /usr/local/clang*/bin -type f
-    - apt-cache search '^gcc-[0-9]'
-    - gcc --version
 
 script:
     - export DISPLAY=:99.0
