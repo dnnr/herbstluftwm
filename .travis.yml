@@ -39,7 +39,7 @@ jobs:
           before_install:
               - CC=clang-3.9 CXX=clang++-3.9
               # Disable some warnings until their causes are fixed:
-              - export CXXFLAGS="-Wno-deprecated-register -Wno-inconsistent-missing-override"
+              - export CXXFLAGS="-Wno-deprecated-register -Wno-inconsistent-missing-override -Wunused-private-field"
           addons:
               apt:
                   packages:
