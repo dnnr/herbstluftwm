@@ -34,8 +34,8 @@ jobs:
               - pip install --user git+https://github.com/eddyxu/cpp-coveralls@d3ee59c
               - pip show -f cpp-coveralls
               - type -a coveralls
-              - find / -name coveralls 2>/dev/null
-              - exit 1
+              - coveralls --version
+              - cpp-coveralls --version
           addons:
               apt:
                   sources:
@@ -49,4 +49,4 @@ jobs:
               - make -j2
               - tox
           after_success:
-              - coveralls --gcov gcov-8 --build-root . --verbose
+              - cpp-coveralls --gcov gcov-8 --build-root . --verbose
