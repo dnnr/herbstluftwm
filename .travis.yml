@@ -47,4 +47,4 @@ jobs:
               - make -j2
               - tox
           after_success:
-              - cpp-coveralls --gcov gcov-8 --build-root . --verbose --gcov-options \-lp
+              - cpp-coveralls --gcov gcov-8 --build-root . --verbose --gcov-options '\-lp'
