@@ -26,7 +26,10 @@ jobs:
           before_install:
               - CC=gcc-8 CXX=g++-8
               # This is new in gcc-8 and not easily fixed:
-              - export CXXFLAGS="-Wno-error=cast-function-type"
+              - CXXFLAGS="-Wno-error=cast-function-type"
+              - CXXFLAGS="$CXXFLAGS --coverage"
+              - export CXXFLAGS
+              - pip3 install --user cpp-coveralls
           addons:
               apt:
                   sources:
@@ -39,6 +42,8 @@ jobs:
               - echo Using $CC / $CXX
               - make -j2
               - tox
+          after_success:
+              - coveralls
 
         - name: "Ubuntu 16.04, gcc-7"
           dist: xenial
