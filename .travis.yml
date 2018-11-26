@@ -29,6 +29,8 @@ jobs:
               - CXXFLAGS="-Wno-error=cast-function-type"
               - CXXFLAGS="$CXXFLAGS --coverage"
               - export CXXFLAGS
+              - LDXXFLAGS="--coverage"
+              - export LDXXFLAGS
               - pip install --user cpp-coveralls
           addons:
               apt:
