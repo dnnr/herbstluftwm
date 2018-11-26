@@ -34,8 +34,6 @@ jobs:
               - pip3.7 install --user git+https://github.com/eddyxu/cpp-coveralls@d3ee59c
               - pip3.7 show -f cpp-coveralls
               - type -a coveralls
-              - coveralls --version
-              - cpp-coveralls --version
           addons:
               apt:
                   sources:
