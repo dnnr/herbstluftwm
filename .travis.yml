@@ -31,7 +31,7 @@ jobs:
               - export CXXFLAGS
               - LDXXFLAGS="--coverage"
               - export LDXXFLAGS
-              - pip install --user cpp-coveralls
+              - pip install --user git+https://github.com/eddyxu/cpp-coveralls@d3ee59c
           addons:
               apt:
                   sources:
