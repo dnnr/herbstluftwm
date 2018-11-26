@@ -27,7 +27,7 @@ jobs:
               - CC=gcc-8 CXX=g++-8
               # This is new in gcc-8 and not easily fixed:
               - CXXFLAGS="-Wno-error=cast-function-type"
-              - CXXFLAGS="$CXXFLAGS --coverage"
+              - CXXFLAGS="$CXXFLAGS --coverage -g"
               - export CXXFLAGS
               - LDXXFLAGS="--coverage"
               - export LDXXFLAGS
