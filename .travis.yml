@@ -32,7 +32,9 @@ jobs:
               - LDXXFLAGS="--coverage"
               - export LDXXFLAGS
               - pip install --user git+https://github.com/eddyxu/cpp-coveralls@d3ee59c
-              - find / -name coveralls
+              - pip show -f cpp-coveralls
+              - type -a coveralls
+              - find / -name coveralls 2>/dev/null
               - exit 1
           addons:
               apt:
