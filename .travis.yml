@@ -90,4 +90,3 @@ jobs:
           # the version provided by Ubuntu, so we use that one.
           dist: trusty
           before_install: CC=gcc-4.8 CXX=g++-4.8
->>>>>>> parent of 27b2a0e... Remove other build variants whilte testing
