@@ -51,13 +51,29 @@ jobs:
 
         - name: "Ubuntu 16.04, gcc-7"
           dist: xenial
-          before_install: CC=gcc-7 CXX=g++-7
+          before_install:
+              - CC=gcc-7 CXX=g++-7
+              - CXXFLAGS="$CXXFLAGS --coverage -g"
+              - export CXXFLAGS
+              - LDXXFLAGS="--coverage"
+              - export LDXXFLAGS
+              - pip install --user git+https://github.com/dnnr/cpp-coveralls@trial-and-error
+              - pip show -f cpp-coveralls
+              - type -a coveralls
           addons:
               apt:
                   sources:
                       - ubuntu-toolchain-r-test
                   packages:
                       - g++-7
+                      - xterm
+                      - tox
+          script:
+              - echo Using $CC / $CXX
+              - make -j2
+              - tox
+          after_success:
+              - cpp-coveralls --gcov gcov-7 --build-root . --verbose --gcov-options '\-lp'
 
         - name: "Ubuntu 16.04, clang-7"
           dist: xenial
