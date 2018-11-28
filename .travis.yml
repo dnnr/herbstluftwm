@@ -44,10 +44,12 @@ jobs:
           dist: xenial
           before_install:
               - CC=gcc-7 CXX=g++-7
-              - CXXFLAGS="$CXXFLAGS --coverage -g"
-              - export CXXFLAGS
-              - LDXXFLAGS="--coverage"
-              - export LDXXFLAGS
+              - flags="--coverage -g"
+              - CXXFLAGS="$flags"
+              - LDXXFLAGS="$flags"
+              - CFLAGS="$flags"
+              - LDFLAGS="$flags"
+              - export CXXFLAGS LDXXFLAGS CFLAGS LDFLAGS
               - pip install --user git+https://github.com/dnnr/cpp-coveralls@trial-and-error
               - pip show -f cpp-coveralls
               - type -a coveralls
