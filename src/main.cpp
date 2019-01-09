@@ -749,6 +749,7 @@ void createnotify(Root*, XEvent* event) {
 
 void configurerequest(Root* root, XEvent* event) {
     HSDebug("name is: ConfigureRequest\n");
+    hlwmDebug() << "name is: ConfigureRequest\n";
     event_on_configure(root, *event);
 }
 

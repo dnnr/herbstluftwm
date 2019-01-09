@@ -2,6 +2,7 @@
 #define __HERBSTLUFT_GLOBALS_H_
 
 #include <X11/Xlib.h>
+#include <iostream>
 
 #define HERBSTLUFT_AUTOSTART "herbstluftwm/autostart"
 #define WINDOW_MANAGER_NAME "herbstluftwm"
@@ -33,6 +34,16 @@ extern int  g_verbose;
 #define ERROR_STRING_BUF_SIZE 1000
 // size for some normal string buffers
 #define STRING_BUF_SIZE 1000
+
+namespace std {
+    //! Declaration of black hole for streams (like std::cout but for /dev/null)
+    extern std::ostream cnull;
+} // namespace std
+
+std::ostream &hlwmDebugStream();
+
+#define hlwmDebug() \
+    hlwmDebugStream() << __FILE__ << ": " << __LINE__ << ": "
 
 #define HSDebug(...) \
     do { \
