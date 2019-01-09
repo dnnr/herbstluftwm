@@ -64,8 +64,9 @@ int xerror(Display *dpy, XErrorEvent *ee) {
     || (ee->request_code == X_CopyArea && ee->error_code == BadDrawable)) {
         return 0;
     }
-    fprintf(stderr, "herbstluftwm: fatal error: request code=%d, error code=%d\n",
-            ee->request_code, ee->error_code);
+    std::cerr << "herbstluftwm: fatal error:"
+              << " request code=" << static_cast<int>(ee->request_code)
+              << ", error code=" << static_cast<int>(ee->error_code) << "\n";
     if (ee->error_code == BadDrawable) {
         HSDebug("Warning: ignoring X_BadDrawable");
         return 0;
