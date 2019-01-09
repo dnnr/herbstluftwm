@@ -14,8 +14,6 @@
 #include <X11/Xproto.h>
 #include <X11/Xutil.h>
 
-using namespace std;
-
 FrameDecoration::FrameDecoration(HSTag* tag_, Settings* settings_)
     : visible(false)
     , window_transparent(false)

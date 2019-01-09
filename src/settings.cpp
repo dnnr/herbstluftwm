@@ -14,8 +14,8 @@
 #include <sstream>
 #include <algorithm>
 
-
-using namespace std;
+using std::string;
+using std::to_string;
 
 Settings* g_settings = nullptr; // the global settings object
 
@@ -120,13 +120,13 @@ Settings::Settings(Root* root)
         if (layout >= LAYOUT_COUNT) {
             return "layout number must be at most " + to_string(LAYOUT_COUNT - 1);
         }
-        return std::string();
+        return string();
     });
-    tree_style.setValidator([] (std::string new_value) {
+    tree_style.setValidator([] (string new_value) {
         if (utf8_string_length(new_value) < 8) {
-            return std::string("tree_style needs 8 characters");
+            return string("tree_style needs 8 characters");
         }
-        return std::string();
+        return string();
     });
 
     // TODO: the lock level is not a setting! should move somewhere else
@@ -140,7 +140,7 @@ Settings::Settings(Root* root)
     }
 }
 
-std::function<int()> Settings::getIntAttr(Object* root, std::string name) {
+std::function<int()> Settings::getIntAttr(Object* root, string name) {
     return [root, name]() {
         Attribute* a = root->deepAttribute(name);
         if (a) {
@@ -152,7 +152,7 @@ std::function<int()> Settings::getIntAttr(Object* root, std::string name) {
     };
 }
 
-std::function<Color()> Settings::getColorAttr(Object* root, std::string name) {
+std::function<Color()> Settings::getColorAttr(Object* root, string name) {
     return [root, name]() {
         Attribute* a = root->deepAttribute(name);
         if (a) {
@@ -164,7 +164,7 @@ std::function<Color()> Settings::getColorAttr(Object* root, std::string name) {
     };
 }
 
-std::function<string(int)> Settings::setIntAttr(Object* root, std::string name) {
+std::function<string(int)> Settings::setIntAttr(Object* root, string name) {
     return [root, name](int val) {
         Attribute* a = root->deepAttribute(name);
         if (a) {
@@ -177,7 +177,7 @@ std::function<string(int)> Settings::setIntAttr(Object* root, std::string name) 
         }
     };
 }
-std::function<string(Color)> Settings::setColorAttr(Object* root, std::string name) {
+std::function<string(Color)> Settings::setColorAttr(Object* root, string name) {
     return [root, name](Color val) {
         Attribute* a = root->deepAttribute(name);
         if (a) {
@@ -192,7 +192,7 @@ std::function<string(Color)> Settings::setColorAttr(Object* root, std::string na
 }
 
 int Settings::set_cmd(Input input, Output output) {
-    std::string set_name, value;
+    string set_name, value;
     if (!(input >> set_name >> value))
         return HERBST_NEED_MORE_ARGS;
 
@@ -207,7 +207,7 @@ int Settings::set_cmd(Input input, Output output) {
         output << input.command()
                << ": Invalid value \"" << value
                << "\" for setting \"" << set_name << "\": "
-               << msg << endl;
+               << msg << std::endl;
         return HERBST_INVALID_ARGUMENT;
     }
     return 0;
@@ -280,7 +280,7 @@ int Settings::cycle_value_cmd(Input argv, Output output) {
         output << argv.command()
                << ": Invalid value for setting \""
                << set_name << "\": "
-               << msg << endl;
+               << msg << std::endl;
         return HERBST_INVALID_ARGUMENT;
     }
     return 0;

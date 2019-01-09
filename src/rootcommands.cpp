@@ -13,8 +13,6 @@
 #include <cstring>
 #include <iostream>
 
-using namespace std;
-
 RootCommands::RootCommands(Root* root_) : root(root_) {
 }
 

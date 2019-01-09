@@ -16,7 +16,7 @@
 #include "ipc-protocol.h"
 #include "utils.h"
 
-using namespace std;
+using std::string;
 
 ClientManager::ClientManager(Theme& theme_, Settings& settings_)
     : focus(*this, "focus")
@@ -55,7 +55,7 @@ HSClient* ClientManager::client(Window window)
  *                  a decimal number its decimal window id.
  * \return          Pointer to the resolved client, or null, if client not found
  */
-HSClient* ClientManager::client(const std::string &identifier)
+HSClient* ClientManager::client(const string &identifier)
 {
     if (identifier.empty()) {
         // TODO: the frame doesn't provide us with a shared pointer yet

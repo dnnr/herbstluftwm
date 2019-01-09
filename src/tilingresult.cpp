@@ -1,7 +1,7 @@
 #include "tilingresult.h"
 #include "utils.h"
 
-using namespace std;
+using std::make_pair;
 
 TilingStep::TilingStep(Rectangle rect)
     : geometry(rect)

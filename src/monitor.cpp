@@ -28,8 +28,6 @@
 
 #include <vector>
 
-using namespace std;
-
 extern MonitorManager* g_monitors;
 
 HSMonitor::HSMonitor(Settings* settings_, MonitorManager* monman_, Rectangle rect_, HSTag* tag_)
@@ -286,7 +284,7 @@ int rename_monitor_command(int argc, char** argv, Output output) {
             ": Monitor \"" << argv[1] << "\" not found!\n";
         return HERBST_INVALID_ARGUMENT;
     }
-    string error = mon->name.change(argv[2]);
+    std::string error = mon->name.change(argv[2]);
     if (!error.empty()) {
         output << argv[0] << ": " << error << "\n";
         return HERBST_INVALID_ARGUMENT;

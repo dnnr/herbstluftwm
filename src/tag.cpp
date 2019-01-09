@@ -22,7 +22,8 @@
 #include "childbyindex.h"
 #include <sstream>
 
-using namespace std;
+using std::make_shared;
+using std::shared_ptr;
 
 static bool    g_tag_flags_dirty = true;
 
