@@ -392,6 +392,12 @@ int custom_hook_emit(Input input) {
     return 0;
 }
 
+static void execvp_helper(char *const command[]) {
+    execvp(command[0], command);
+    std::cerr << "herbstluftwm: execvp \"" << command << "\"";
+    perror(" failed");
+}
+
 // spawn() heavily inspired by dwm.c
 int spawn(int argc, char** argv) {
     if (argc < 2) {
@@ -413,9 +419,7 @@ int spawn(int argc, char** argv) {
         execargs[i] = nullptr;
         // do actual exec
         setsid();
-        execvp(execargs[0], execargs);
-        fprintf(stderr, "herbstluftwm: execvp \"%s\"", argv[1]);
-        perror(" failed");
+        execvp_helper(execargs);
         exit(0);
     }
     return 0;
@@ -634,7 +638,7 @@ void execute_autostart_file() {
         HSDebug("Can not execute %s, falling back to %s\n", path.c_str(), global_autostart);
         execl(global_autostart, global_autostart, nullptr);
 
-        fprintf(stderr, "herbstluftwm: execvp \"%s\"", global_autostart);
+        std::cerr << "herbstluftwm: execl \"" << global_autostart << "\"";
         perror(" failed");
         exit(EXIT_FAILURE);
     }
@@ -980,15 +984,11 @@ int main(int argc, char* argv[]) {
         if (g_exec_args) {
             // do actual exec
             HSDebug("==> Doing wmexec to %s\n", g_exec_args[0]);
-            execvp(g_exec_args[0], g_exec_args);
-            fprintf(stderr, "herbstluftwm: execvp \"%s\"", g_exec_args[0]);
-            perror(" failed");
+            execvp_helper(g_exec_args);
         }
         // on failure or if no other wm given, then fall back
         HSDebug("==> Doing wmexec to %s\n", argv[0]);
-        execvp(argv[0], argv);
-        fprintf(stderr, "herbstluftwm: execvp \"%s\"", argv[1]);
-        perror(" failed");
+        execvp_helper(argv);
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
