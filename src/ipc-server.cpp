@@ -5,6 +5,7 @@
 #include <X11/Xutil.h>
 #include <cstdio>
 #include <cstring>
+#include <iostream>
 #include <sstream>
 
 #include "command.h"
@@ -31,9 +32,9 @@ bool ipc_handle_connection(Window win) {
     char** list_return;
     int count;
     if (Success != Xutf8TextPropertyToTextList(g_display, &text_prop, &list_return, &count)) {
-        fprintf(stderr, "herbstluftwm: Warning: could not parse the %s atom of herbstclient "
-                        "window %d to utf8 list\n",
-                        HERBST_IPC_ARGS_ATOM, (unsigned int)win);
+        std::cerr << "herbstluftwm: Warning: could not parse the " << HERBST_IPC_ARGS_ATOM
+                  << " atom of herbstclient window 0x" << std::hex << win
+                  << " to utf8 list\n";
         XFree(text_prop.value);
         return false;
     }
