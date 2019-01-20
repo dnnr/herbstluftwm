@@ -20,6 +20,8 @@ public:
     std::vector<std::string> cmd;
 
     bool    enabled;  // Is the keybinding already grabbed
+
+    static const std::map<std::string, unsigned int> modifierMasks;
 };
 
 unsigned int modifiername2mask(const char* name);

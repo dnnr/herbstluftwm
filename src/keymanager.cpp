@@ -11,6 +11,13 @@
 using std::vector;
 using std::unique_ptr;
 
+typedef struct {
+    const char* name;
+    unsigned int mask;
+} Name2Modifier;
+
+extern Name2Modifier g_modifier_names[];
+
 extern vector<unique_ptr<KeyBinding>> g_key_binds;
 
 int KeyManager::addKeybindCommand(Input input, Output output) {

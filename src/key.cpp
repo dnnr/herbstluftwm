@@ -15,6 +15,7 @@
 #include "ipc-protocol.h"
 #include "utils.h"
 
+using std::string;
 using std::unique_ptr;
 using std::vector;
 
@@ -41,12 +42,7 @@ void key_remove_all_binds() {
     regrab_keys();
 }
 
-typedef struct {
-    const char* name;
-    unsigned int mask;
-} Name2Modifier;
-
-static Name2Modifier g_modifier_names[] = {
+const std::map<std::string, unsigned int> KeyBinding::modifierMasks = {
     { "Mod1",       Mod1Mask },
     { "Mod2",       Mod2Mask },
     { "Mod3",       Mod3Mask },
@@ -58,27 +54,6 @@ static Name2Modifier g_modifier_names[] = {
     { "Control",    ControlMask },
     { "Ctrl",       ControlMask },
 };
-
-unsigned int modifiername2mask(const char* name) {
-    Name2Modifier* elem;
-    elem = STATIC_TABLE_FIND_STR(Name2Modifier, g_modifier_names, name,
-                                 (char*)name);
-    return elem ? elem->mask : 0;
-}
-
-/**
- * \brief finds a (any) modifier in mask and returns its name
- *
- * \return  the name as a char string. You must not free it.
- */
-const char* modifiermask2name(unsigned int mask) {
-    for (int i = 0; i < LENGTH(g_modifier_names); i++) {
-        if (g_modifier_names[i].mask & mask) {
-            return g_modifier_names[i].name;
-        }
-    }
-    return nullptr;
-}
 
 vector<std::string> splitKeySpec(std::string keySpec)
 {
@@ -109,7 +84,7 @@ bool string2modifiers(const std::string& str, unsigned int* modmask) {
     // all parts except last one are modifiers
     *modmask = 0;
     for (auto iter = splitted.begin(); iter + 1 != splitted.end(); iter++) {
-        unsigned int cur_mask = modifiername2mask(iter->c_str());
+        unsigned int cur_mask = KeyBinding::modifierMasks.at(*iter);
         if (cur_mask == 0) {
             HSWarning("unknown modifier key \"%s\"\n", iter->c_str());
             return false;
@@ -237,14 +212,18 @@ std::string keybinding_to_string(KeyBinding* binding) {
     while (new_mask != 0 && new_mask != old_mask) {
         old_mask = new_mask;
 
-        /* try to find a modifier */
-        const char* name = modifiermask2name(old_mask);
-        if (!name) {
-            break;
+        // reverse lookup modifier name by its mask
+        string name;
+        for (auto &strToMask : KeyBinding::modifierMasks) {
+            if (strToMask.second == old_mask) {
+                name = strToMask.first;
+                break;
+            }
         }
+
         str << name << KEY_COMBI_SEPARATORS[0];
         /* remove found mask from mask */
-        new_mask = old_mask & ~ modifiername2mask(name);
+        new_mask = old_mask & ~ KeyBinding::modifierMasks.at(name);
     }
 
     /* add keysym */
@@ -305,8 +284,8 @@ void complete_against_keysyms(const char* needle, char* prefix, Output output) {
 void complete_against_modifiers(const char* needle, char seperator,
                                 char* prefix, Output output) {
     GString* buf = g_string_sized_new(20);
-    for (int i = 0; i < LENGTH(g_modifier_names); i++) {
-        g_string_printf(buf, "%s%c", g_modifier_names[i].name, seperator);
+    for (auto &strToMask : KeyBinding::modifierMasks) {
+        g_string_printf(buf, "%s%c", strToMask.first.c_str(), seperator);
         try_complete_prefix_partial(needle, buf->str, prefix, output);
     }
     g_string_free(buf, true);
