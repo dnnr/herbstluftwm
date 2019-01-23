@@ -29,21 +29,21 @@ def test_cannot_add_monitor_without_free_tag(hlwm):
 
 def test_cannot_add_monitor_with_nonexistent_tag(hlwm):
     call = hlwm.call_xfail('add_monitor 800x600+40+40 derp')
-    assert call.stderr == 'add_monitor: Tag "derp" does not exist\n'
+    assert call.stderr == 'add_monitor: The tag "derp" does not exist\n'
     assert hlwm.get_attr('monitors.count') == '1'
 
 
 def test_cannot_add_monitor_with_already_viewed_tag(hlwm):
     hlwm.call('add tag2')
     call = hlwm.call_xfail('add_monitor 800x600+40+40 default')
-    assert call.stderr == 'add_monitor: Tag "default" is already being viewed on a monitor\n'
+    assert call.stderr == 'add_monitor: The tag "default" is already viewed on a monitor\n'
     assert hlwm.get_attr('monitors.count') == '1'
 
 
 def test_cannot_add_monitor_with_numeric_name(hlwm):
     hlwm.call('add tag2')
     call = hlwm.call_xfail('add_monitor 800x600+40+40 tag2 123foo')
-    assert call.stderr == 'add_monitor: Invalid name "123foo": The monitor name may not start with a number\n'
+    assert call.stderr == 'add_monitor: The monitor name may not start with a number\n'
     assert hlwm.get_attr('monitors.count') == '1'
 
 
@@ -58,7 +58,7 @@ def test_cannot_add_monitor_with_existing_name(hlwm):
     hlwm.call('rename_monitor 0 mon1')
     hlwm.call('add tag2')
     call = hlwm.call_xfail('add_monitor 800x600+40+40 tag2 mon1')
-    assert call.stderr == 'add_monitor: A monitor with the name "mon1" already exists\n'
+    assert call.stderr == 'add_monitor: A monitor with the same name already exists\n'
     assert hlwm.get_attr('monitors.count') == '1'
 
 
