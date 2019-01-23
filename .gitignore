@@ -30,4 +30,6 @@ src/TAGS
 ipc-client/tags
 ipc-client/TAGS
 
-
+# ignore tests
+/.tox
+__pycache__
