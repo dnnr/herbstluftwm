@@ -4,6 +4,7 @@
 #include <X11/Xlib.h>
 
 #include "glib-backports.h"
+#include "keycombo.h"
 #include "types.h"
 
 #define KEY_COMBI_SEPARATORS "+-"
@@ -13,22 +14,16 @@ class Client;
 
 class KeyBinding {
 public:
-    KeySym keysym;
-    unsigned int modifiers;
+    KeyCombo keyCombo;
 
     //! Command to call
     std::vector<std::string> cmd;
 
     bool    enabled;  // Is the keybinding already grabbed
-
-    static const std::map<std::string, unsigned int> modifierMasks;
 };
 
 unsigned int modifiername2mask(const char* name);
 const char* modifiermask2name(unsigned int mask);
-
-bool string2modifiers(const std::string& string, unsigned int* modmask);
-bool string2key(const std::string& str, unsigned int* modmask, KeySym* keysym);
 
 int list_keysyms(int argc, char** argv, Output output);
 bool key_remove_bind_with_keysym(unsigned int modifiers, KeySym sym);

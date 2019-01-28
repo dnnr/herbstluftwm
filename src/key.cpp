@@ -13,6 +13,7 @@
 #include "glib-backports.h"
 #include "globals.h"
 #include "ipc-protocol.h"
+#include "keycombo.h"
 #include "utils.h"
 
 using std::string;
@@ -42,85 +43,19 @@ void key_remove_all_binds() {
     regrab_keys();
 }
 
-const std::map<std::string, unsigned int> KeyBinding::modifierMasks = {
-    { "Mod1",       Mod1Mask },
-    { "Mod2",       Mod2Mask },
-    { "Mod3",       Mod3Mask },
-    { "Mod4",       Mod4Mask },
-    { "Mod5",       Mod5Mask },
-    { "Alt",        Mod1Mask },
-    { "Super",      Mod4Mask },
-    { "Shift",      ShiftMask },
-    { "Control",    ControlMask },
-    { "Ctrl",       ControlMask },
-};
-
-vector<std::string> splitKeySpec(std::string keySpec)
-{
-    // Normalize spec to use a single separator:
-    char baseSep = KEY_COMBI_SEPARATORS[0];
-    for (auto &sep : KEY_COMBI_SEPARATORS) {
-        std::replace(keySpec.begin(), keySpec.end(), sep, baseSep);
-    }
-
-    // Split spec into tokens:
-    vector<std::string> tokens;
-    std::string token;
-    std::istringstream tokenStream(keySpec);
-    while (std::getline(tokenStream, token, baseSep)) {
-        tokens.push_back(token);
-    }
-    return tokens;
-}
-
-bool string2modifiers(const std::string& str, unsigned int* modmask) {
-    // example strings: "Mod1-space" "Mod4+f" "f"
-    auto splitted = splitKeySpec(str);
-    // this should give at least one part
-    if (splitted.empty()) {
-        HSWarning("empty keysym\n");
-        return false;
-    }
-    // all parts except last one are modifiers
-    *modmask = 0;
-    for (auto iter = splitted.begin(); iter + 1 != splitted.end(); iter++) {
-        unsigned int cur_mask = KeyBinding::modifierMasks.at(*iter);
-        if (cur_mask == 0) {
-            HSWarning("unknown modifier key \"%s\"\n", iter->c_str());
-            return false;
-        }
-        *modmask |= cur_mask;
-    }
-    return true;
-}
-
-bool string2key(const std::string& str, unsigned int* modmask, KeySym* keysym) {
-    if (!string2modifiers(str, modmask)) {
-        return false;
-    }
-    // last one is the key
-    auto lastToken = splitKeySpec(str).back();
-    *keysym = XStringToKeysym(lastToken.c_str());
-    if (*keysym == NoSymbol) {
-        HSWarning("unknown KeySym \"%s\"\n", lastToken.c_str());
-        return false;
-    }
-    return true;
-}
-
-static gint keysym_equals(const KeyBinding* a, const KeyBinding* b) {
+static gint keysym_equals(const KeyCombo* a, const KeyCombo* b) {
     bool equal = (CLEANMASK(a->modifiers) == CLEANMASK(b->modifiers));
     equal = equal && (a->keysym == b->keysym);
     return equal ? 0 : -1;
 }
 
 void handle_key_press(XEvent* ev) {
-    KeyBinding pressed;
+    KeyCombo pressed;
     pressed.keysym = XkbKeycodeToKeysym(g_display, ev->xkey.keycode, 0, 0);
     pressed.modifiers = ev->xkey.state;
     auto found = std::find_if(g_key_binds.begin(), g_key_binds.end(),
             [=](const unique_ptr<KeyBinding> &other) {
-                return keysym_equals(&pressed, other.get()) == 0;
+                return keysym_equals(&pressed, &(other->keyCombo)) == 0;
                 });
     if (found != g_key_binds.end()) {
         // call the command
@@ -132,12 +67,12 @@ void handle_key_press(XEvent* ev) {
 }
 
 bool key_remove_bind_with_keysym(unsigned int modifiers, KeySym keysym){
-    KeyBinding bind;
-    bind.modifiers = modifiers;
-    bind.keysym = keysym;
+    KeyCombo combo;
+    combo.modifiers = modifiers;
+    combo.keysym = keysym;
     // search this keysym in list and remove it
     for (auto iter = g_key_binds.begin(); iter != g_key_binds.end(); iter++) {
-        if (keysym_equals(&bind, iter->get()) == 0) {
+        if (keysym_equals(&combo, &((*iter)->keyCombo)) == 0) {
             g_key_binds.erase(iter);
             return true;
         }
@@ -156,14 +91,14 @@ void regrab_keys() {
 
 void grab_keybind(KeyBinding* binding) {
     unsigned int modifiers[] = { 0, LockMask, numlockmask, numlockmask|LockMask };
-    KeyCode keycode = XKeysymToKeycode(g_display, binding->keysym);
+    KeyCode keycode = XKeysymToKeycode(g_display, binding->keyCombo.keysym);
     if (!keycode) {
         // ignore unknown keysyms
         return;
     }
     // grab key for each modifier that is ignored (capslock, numlock)
     for (int i = 0; i < LENGTH(modifiers); i++) {
-        XGrabKey(g_display, keycode, modifiers[i]|binding->modifiers, g_root,
+        XGrabKey(g_display, keycode, modifiers[i]|binding->keyCombo.modifiers, g_root,
                  True, GrabModeAsync, GrabModeAsync);
     }
     // mark the keybinding as enabled
@@ -172,14 +107,14 @@ void grab_keybind(KeyBinding* binding) {
 
 void ungrab_keybind(KeyBinding* binding, void* useless_pointer) {
     unsigned int modifiers[] = { 0, LockMask, numlockmask, numlockmask|LockMask };
-    KeyCode keycode = XKeysymToKeycode(g_display, binding->keysym);
+    KeyCode keycode = XKeysymToKeycode(g_display, binding->keyCombo.keysym);
     if (!keycode) {
         // ignore unknown keysyms
         return;
     }
     // grab key for each modifier that is ignored (capslock, numlock)
     for (int i = 0; i < LENGTH(modifiers); i++) {
-        XUngrabKey(g_display, keycode, modifiers[i]|binding->modifiers, g_root);
+        XUngrabKey(g_display, keycode, modifiers[i]|binding->keyCombo.modifiers, g_root);
     }
     binding->enabled = false;
 }
@@ -208,26 +143,28 @@ std::string keybinding_to_string(KeyBinding* binding) {
     std::stringstream str;
 
     /* add modifiers */
-    unsigned int old_mask = 0, new_mask = binding->modifiers;
+    unsigned int old_mask = 0, new_mask = binding->keyCombo.modifiers;
     while (new_mask != 0 && new_mask != old_mask) {
         old_mask = new_mask;
 
         // reverse lookup modifier name by its mask
         string name;
-        for (auto &strToMask : KeyBinding::modifierMasks) {
-            if (strToMask.second == old_mask) {
-                name = strToMask.first;
+        unsigned int mask = 0;
+        for (auto &strToMask : KeyCombo::modifierMasks) {
+            if (strToMask.mask & old_mask) {
+                name = strToMask.name;
+                mask = strToMask.mask;
                 break;
             }
         }
 
         str << name << KEY_COMBI_SEPARATORS[0];
         /* remove found mask from mask */
-        new_mask = old_mask & ~ KeyBinding::modifierMasks.at(name);
+        new_mask = old_mask & ~ mask;
     }
 
     /* add keysym */
-    const char* name = XKeysymToString(binding->keysym);
+    const char* name = XKeysymToString(binding->keyCombo.keysym);
     if (!name) {
         g_warning("XKeysymToString failed! using \'?\' instead\n");
         name = "?";
@@ -284,8 +221,8 @@ void complete_against_keysyms(const char* needle, char* prefix, Output output) {
 void complete_against_modifiers(const char* needle, char seperator,
                                 char* prefix, Output output) {
     GString* buf = g_string_sized_new(20);
-    for (auto &strToMask : KeyBinding::modifierMasks) {
-        g_string_printf(buf, "%s%c", strToMask.first.c_str(), seperator);
+    for (auto& strToMask : KeyCombo::modifierMasks) {
+        g_string_printf(buf, "%s%c", strToMask.name.c_str(), seperator);
         try_complete_prefix_partial(needle, buf->str, prefix, output);
     }
     g_string_free(buf, true);

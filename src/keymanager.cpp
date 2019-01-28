@@ -1,5 +1,6 @@
 #include "keymanager.h"
 
+#include <X11/keysym.h>
 #include <memory>
 
 #include "completion.h"
@@ -8,8 +9,9 @@
 #include "key.h"
 #include "utils.h"
 
-using std::vector;
+using std::string;
 using std::unique_ptr;
+using std::vector;
 
 typedef struct {
     const char* name;
@@ -27,9 +29,10 @@ int KeyManager::addKeybindCommand(Input input, Output output) {
 
     auto newBinding = make_unique<KeyBinding>();
 
-    // Extract modifiers/keysym
-    if (!string2key(input.front(), &(newBinding->modifiers), &(newBinding->keysym))) {
-        output << input.command() << ": No such KeySym/modifier\n";
+    try {
+        newBinding->keyCombo = KeyCombo(input.front());
+    } catch (std::runtime_error &error) {
+        output << input.command() << ": " << error.what() << std::endl;
         return HERBST_INVALID_ARGUMENT;
     }
 
@@ -38,10 +41,10 @@ int KeyManager::addKeybindCommand(Input input, Output output) {
     newBinding->cmd = {input.begin(), input.end()};
 
     // Remove existing binding with same keysym/modifiers
-    key_remove_bind_with_keysym(newBinding->modifiers, newBinding->keysym);
+    key_remove_bind_with_keysym(newBinding->keyCombo.modifiers, newBinding->keyCombo.keysym);
 
     // Grab for events on this keycode
-    grab_keybind(newBinding.get());
+    xKeyGrabber_.grabKeyCombo(newBinding->keyCombo);
 
     // Add keybinding to list
     g_key_binds.push_back(std::move(newBinding));
@@ -71,11 +74,14 @@ int KeyManager::removeKeybindCommand(Input input, Output output) {
     } else {
         unsigned int modifiers;
         KeySym keysym;
-        // get keycode
-        if (!string2key(arg, &modifiers, &keysym)) {
-            output << arg << ": No such KeySym/modifier\n";
+        try {
+            modifiers = KeyCombo::string2modifiers(arg);
+            keysym = KeyCombo::string2keysym(arg);
+        } catch (std::runtime_error &error) {
+            output << input.command() << ": " << arg << ": " << error.what() << "\n";
             return HERBST_INVALID_ARGUMENT;
         }
+
         if (key_remove_bind_with_keysym(modifiers, keysym) == false) {
             output << input.command() << ": Key \"" << arg << "\" is not bound\n";
         }
@@ -83,4 +89,23 @@ int KeyManager::removeKeybindCommand(Input input, Output output) {
     }
 
     return HERBST_EXIT_SUCCESS;
+}
+
+void KeyManager::regrabAll() {
+    xKeyGrabber_.updateKeyboardMapping();
+
+     // Remove all current grabs:
+    XUngrabKey(g_display, AnyKey, AnyModifier, g_root);
+
+    for (auto& binding : g_key_binds) {
+        xKeyGrabber_.grabKeyCombo(binding->keyCombo);
+    }
+
+}
+
+void KeyManager::setKeyMask(string keyMask) {
+    if (keyMask == keyMask_) {
+        // nothing to do
+        return;
+    }
 }
