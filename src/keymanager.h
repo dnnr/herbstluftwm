@@ -9,9 +9,8 @@ public:
     int listKeybindsCommand(Output output);
     int removeKeybindCommand(Input input, Output output);
 
-    void setKeyMask(std::string keyMask);
-
     void regrabAll();
+    void ensureKeymask();
 
 private:
     XKeyGrabber xKeyGrabber_;

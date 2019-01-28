@@ -3,10 +3,12 @@
 #include <X11/keysym.h>
 #include <memory>
 
+#include "clientmanager.h"
 #include "completion.h"
 #include "globals.h"
 #include "ipc-protocol.h"
 #include "key.h"
+#include "root.h"
 #include "utils.h"
 
 using std::string;
@@ -48,6 +50,8 @@ int KeyManager::addKeybindCommand(Input input, Output output) {
 
     // Add keybinding to list
     g_key_binds.push_back(std::move(newBinding));
+
+    ensureKeymask();
 
     return HERBST_EXIT_SUCCESS;
 }
@@ -103,9 +107,15 @@ void KeyManager::regrabAll() {
 
 }
 
-void KeyManager::setKeyMask(string keyMask) {
-    if (keyMask == keyMask_) {
-        // nothing to do
-        return;
+
+/*!
+ * Ensures that the keymask of the currently focused client is applied.
+ */
+void KeyManager::ensureKeymask() {
+    // Reapply the current keymask (if any)
+    auto focusedClient = Root::get()->clients()->focus();
+    if (focusedClient != nullptr) {
+        key_set_keymask(focusedClient->keymask_());
     }
+
 }
