@@ -102,8 +102,12 @@ def test_keymask(hlwm, keyboard, maskmethod, whenbind, refocus):
 
     if refocus:
         hlwm.create_client()
+        import sys
+        print("client created", file=sys.stderr)
         hlwm.call('cycle +1')
+        print("cycle+1 done", file=sys.stderr)
         hlwm.call('cycle -1')
+        print("cycle-1 done", file=sys.stderr)
 
     keyboard.press('x')
 

@@ -19,6 +19,7 @@ public:
     //! Command to call
     std::vector<std::string> cmd;
 
+    // TODO: Rename this to "grabbed"
     bool    enabled;  // Is the keybinding already grabbed
 };
 
@@ -37,7 +38,6 @@ void regrab_keys();
 void grab_keybind(KeyBinding* binding);
 void update_numlockmask();
 unsigned int* get_numlockmask_ptr();
-void key_set_keymask(const std::string& keymask);
 void handle_key_press(XEvent* ev);
 
 void key_init();

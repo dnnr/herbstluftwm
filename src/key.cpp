@@ -227,39 +227,3 @@ void complete_against_modifiers(const char* needle, char seperator,
     }
     g_string_free(buf, true);
 }
-
-static void key_set_keymask_helper(KeyBinding* b, const std::regex &maskRegex) {
-    // add keybinding
-    auto name = keybinding_to_string(b);
-    bool isMasked = std::regex_match(name, maskRegex);
-
-    if (!isMasked && !b->enabled) {
-        HSDebug("Not masking binding: %s\n", name.c_str());
-        grab_keybind(b);
-    } else if(isMasked && b->enabled) {
-        HSDebug("Masking binding: %s\n", name.c_str());
-        ungrab_keybind(b, nullptr);
-    }
-}
-
-void key_set_keymask(const std::string& keymask) {
-    try {
-        if (keymask != "") {
-            auto maskRegex = std::regex(keymask, std::regex::extended);
-            for (auto& binding : g_key_binds) {
-                key_set_keymask_helper(binding.get(), maskRegex);
-            }
-            return;
-        } else {
-            HSDebug("Ignoring empty keymask\n");
-        }
-    } catch(std::regex_error& err) {
-        HSDebug("keymask: Can not parse regex \"%s\" from keymask: %s\n",
-                keymask.c_str(), err.what());
-    }
-
-    // Failure fallthrough: Make sure that all bindings end up enabled.
-    for (auto& binding : g_key_binds) {
-        grab_keybind(binding.get());
-    }
-}
