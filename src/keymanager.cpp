@@ -59,8 +59,8 @@ int KeyManager::addKeybindCommand(Input input, Output output) {
 
 int KeyManager::listKeybindsCommand(Output output) {
     for (auto& binding : g_key_binds) {
-        // add keybinding
-        output << keybinding_to_string(binding.get());
+        // add key combo
+        output << binding->keyCombo.str();
         // add associated command
         output << "\t" << ArgList(binding->cmd).join('\t');
         output << "\n";
@@ -151,7 +151,7 @@ void KeyManager::ensureKeymask(const Client* client) {
 //! Apply new keymask by grabbing/ungrabbing current bindings accordingly
 void KeyManager::setActiveKeymask(const Keymask& newMask) {
     for (auto& binding : g_key_binds) {
-        auto name = keybinding_to_string(binding.get());
+        auto name = binding->keyCombo.str();
         bool isMasked = binding->keyCombo.matches(newMask.regex);
 
         if (!isMasked && !binding->enabled) {
