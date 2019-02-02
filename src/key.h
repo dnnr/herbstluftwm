@@ -4,6 +4,7 @@
 #include <X11/Xlib.h>
 
 #include "glib-backports.h"
+#include "keybinding.h"
 #include "keycombo.h"
 #include "types.h"
 
@@ -11,17 +12,6 @@
 
 class HSTag;
 class Client;
-
-class KeyBinding {
-public:
-    KeyCombo keyCombo;
-
-    //! Command to call
-    std::vector<std::string> cmd;
-
-    // TODO: Rename this to "grabbed"
-    bool    enabled;  // Is the keybinding already grabbed
-};
 
 unsigned int modifiername2mask(const char* name);
 const char* modifiermask2name(unsigned int mask);
