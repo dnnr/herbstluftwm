@@ -15,10 +15,6 @@ public:
         }
     }
 
-    bool operator==(const std::string& other) {
-        return str == other;
-    }
-
     bool operator==(const Keymask& other) {
         return other.str == str;
     }

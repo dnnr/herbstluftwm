@@ -132,12 +132,12 @@ void KeyManager::ensureKeymask(const Client* client) {
         HSDebug("KeyManager::ensureKeymask(): Assuming focused client: %s\n", client->window_id_str().c_str());
     }
 
-
-    if (activeKeymask_ != targetMaskStr) {
+    if (activeKeymask_.str != targetMaskStr) {
         try {
             HSDebug("KeyManager::ensureKeymask(): Applying new keymask: \"%s\"\n", targetMaskStr.c_str());
-            setActiveKeymask({targetMaskStr});
-        } catch(std::regex_error& err) {
+            Keymask newMask(targetMaskStr);
+            setActiveKeymask(newMask);
+        } catch (std::regex_error& err) {
             HSDebug("KeyManager::ensureKeymask(): Can not apply invalid regex \"%s\": %s\n",
                     targetMaskStr.c_str(), err.what());
 
