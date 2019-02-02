@@ -105,21 +105,6 @@ void grab_keybind(KeyBinding* binding) {
     binding->enabled = true;
 }
 
-void ungrab_keybind(KeyBinding* binding, void* useless_pointer) {
-    unsigned int modifiers[] = { 0, LockMask, numlockmask, numlockmask|LockMask };
-    KeyCode keycode = XKeysymToKeycode(g_display, binding->keyCombo.keysym);
-    if (!keycode) {
-        // ignore unknown keysyms
-        return;
-    }
-    // grab key for each modifier that is ignored (capslock, numlock)
-    for (int i = 0; i < LENGTH(modifiers); i++) {
-        XUngrabKey(g_display, keycode, modifiers[i]|binding->keyCombo.modifiers, g_root);
-    }
-    binding->enabled = false;
-}
-
-
 // update the numlockmask
 // from dwm.c
 void update_numlockmask() {
