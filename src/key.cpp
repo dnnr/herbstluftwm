@@ -136,44 +136,6 @@ void update_numlockmask() {
     XFreeModifiermap(modmap);
 }
 
-/**
- * Converts the given binding to a string
- */
-std::string keybinding_to_string(KeyBinding* binding) {
-    std::stringstream str;
-
-    /* add modifiers */
-    unsigned int old_mask = 0, new_mask = binding->keyCombo.modifiers;
-    while (new_mask != 0 && new_mask != old_mask) {
-        old_mask = new_mask;
-
-        // reverse lookup modifier name by its mask
-        string name;
-        unsigned int mask = 0;
-        for (auto &strToMask : KeyCombo::modifierMasks) {
-            if (strToMask.mask & old_mask) {
-                name = strToMask.name;
-                mask = strToMask.mask;
-                break;
-            }
-        }
-
-        str << name << KEY_COMBI_SEPARATORS[0];
-        /* remove found mask from mask */
-        new_mask = old_mask & ~ mask;
-    }
-
-    /* add keysym */
-    const char* name = XKeysymToString(binding->keyCombo.keysym);
-    if (!name) {
-        g_warning("XKeysymToString failed! using \'?\' instead\n");
-        name = "?";
-    }
-    str << name;
-
-    return str.str();
-}
-
 // STRTODO
 struct key_find_context {
     Output      output;
@@ -182,7 +144,7 @@ struct key_find_context {
 };
 
 static void key_find_binds_helper(KeyBinding* b, struct key_find_context* c) {
-    auto name = keybinding_to_string(b);
+    auto name = b->keyCombo.str();
     if (name.find(c->needle) == 0) {
         /* add to output if key starts with searched needle */
         c->output << name << std::endl;
