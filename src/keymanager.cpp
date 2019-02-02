@@ -54,6 +54,8 @@ int KeyManager::addKeybindCommand(Input input, Output output) {
     // Add keybinding to list
     g_key_binds.push_back(std::move(newBinding));
 
+    ensureKeymask();
+
     return HERBST_EXIT_SUCCESS;
 }
 
