@@ -22,6 +22,5 @@ void complete_against_modifiers(const char* needle, char seperator,
 void complete_against_keysyms(const char* needle, char* prefix, Output output);
 void update_numlockmask();
 unsigned int* get_numlockmask_ptr();
-void handle_key_press(XEvent* ev);
 
 #endif

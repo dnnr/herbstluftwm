@@ -1,6 +1,7 @@
 #pragma once
 
 #include <regex>
+#include <X11/Xlib.h>
 
 #include "keycombo.h"
 
@@ -20,9 +21,12 @@ public:
         updateNumlockMask();
     }
 
+    KeyCombo xEventToKeyCombo(XEvent *ev);
+
     void grabKeyCombo(const KeyCombo& keyCombo);
     void ungrabKeyCombo(const KeyCombo& keyCombo);
     void ungrabAll();
+
 private:
     void changeGrabbedState(const KeyCombo& keyCombo, bool grabbed);
     unsigned int numlockMask = 0;

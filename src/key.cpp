@@ -34,24 +34,6 @@ static gint keysym_equals(const KeyCombo* a, const KeyCombo* b) {
     return equal ? 0 : -1;
 }
 
-void handle_key_press(XEvent* ev) {
-    KeyCombo pressed;
-    pressed.keysym = XkbKeycodeToKeysym(g_display, ev->xkey.keycode, 0, 0);
-    pressed.modifiers = ev->xkey.state;
-    auto& binds = Root::get()->keys()->binds;
-    auto found = std::find_if(binds.begin(), binds.end(),
-            [=](const unique_ptr<KeyBinding> &other) {
-                return keysym_equals(&pressed, &(other->keyCombo)) == 0;
-                });
-    if (found != binds.end()) {
-        // call the command
-        std::ostringstream discardedOutput;
-        auto& cmd = (*found)->cmd;
-        Input input(cmd.front(), {cmd.begin() + 1, cmd.end()});
-        Commands::call(input, discardedOutput);
-    }
-}
-
 bool key_remove_bind_with_keysym(unsigned int modifiers, KeySym keysym){
     KeyCombo combo;
     combo.modifiers = modifiers;

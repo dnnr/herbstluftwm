@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "clientmanager.h"
+#include "command.h"
 #include "completion.h"
 #include "globals.h"
 #include "ipc-protocol.h"
@@ -103,6 +104,22 @@ int KeyManager::removeKeybindCommand(Input input, Output output) {
     }
 
     return HERBST_EXIT_SUCCESS;
+}
+
+void KeyManager::handleKeyPress(XEvent* ev) {
+    KeyCombo pressed = xKeyGrabber_.xEventToKeyCombo(ev);
+
+    auto found = std::find_if(binds.begin(), binds.end(),
+            [=](const unique_ptr<KeyBinding> &other) {
+                return pressed == other->keyCombo;
+            });
+    if (found != binds.end()) {
+        // execute the bound command
+        std::ostringstream discardedOutput;
+        auto& cmd = (*found)->cmd;
+        Input input(cmd.front(), {cmd.begin() + 1, cmd.end()});
+        Commands::call(input, discardedOutput);
+    }
 }
 
 void KeyManager::regrabAll() {

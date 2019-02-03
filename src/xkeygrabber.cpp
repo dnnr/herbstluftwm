@@ -2,6 +2,7 @@
 
 #include <X11/keysym.h>
 #include <X11/Xlib.h>
+#include <X11/XKBlib.h>
 
 #include "globals.h"
 
@@ -17,6 +18,23 @@ void XKeyGrabber::updateNumlockMask() {
                == XKeysymToKeycode(g_display, XK_Num_Lock))
                 numlockMask = (1 << i);
     XFreeModifiermap(modmap);
+}
+
+/*!
+ * Derives a "normalized" KeyCombo from a given event.
+ *
+ * Normalization means stripping any ignored modifiers from modifier mask
+ * (including the runtime-defined Numlock mask).
+ */
+KeyCombo XKeyGrabber::xEventToKeyCombo(XEvent *ev) {
+    KeyCombo combo;
+    combo.keysym = XkbKeycodeToKeysym(g_display, ev->xkey.keycode, 0, 0);
+    combo.modifiers = ev->xkey.state;
+
+    // Normalize
+    combo.modifiers &= ~(numlockMask | LockMask);
+
+    return combo;
 }
 
 //! Grabs the given key combo

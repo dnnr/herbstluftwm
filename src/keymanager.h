@@ -43,6 +43,8 @@ public:
     int listKeybindsCommand(Output output);
     int removeKeybindCommand(Input input, Output output);
 
+    void handleKeyPress(XEvent* ev);
+
     void regrabAll();
     void ensureKeymask(const Client* client = nullptr);
     void setActiveKeymask(const Keymask& newMask);
