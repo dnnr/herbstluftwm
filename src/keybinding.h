@@ -10,8 +10,5 @@ public:
     std::vector<std::string> cmd;
 
     //! Whether this binding is currently grabbed
-    // bool grabbed;
-
-    // temporarily:
-    bool enabled;
+    bool grabbed;
 };

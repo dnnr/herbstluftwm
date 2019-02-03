@@ -54,7 +54,7 @@ int KeyManager::addKeybindCommand(Input input, Output output) {
     if (!newBinding->keyCombo.matches(activeKeymask_.regex)) {
         // Grab for events on this keycode
         xKeyGrabber_.grabKeyCombo(newBinding->keyCombo);
-        newBinding->enabled = true;
+        newBinding->grabbed = true;
     }
 
     // Add keybinding to list
@@ -113,7 +113,7 @@ void KeyManager::regrabAll() {
 
     for (auto& binding : binds) {
         xKeyGrabber_.grabKeyCombo(binding->keyCombo);
-        binding->enabled = true;
+        binding->grabbed = true;
     }
 }
 
@@ -163,14 +163,14 @@ void KeyManager::setActiveKeymask(const Keymask& newMask) {
         auto name = binding->keyCombo.str();
         bool isMasked = binding->keyCombo.matches(newMask.regex);
 
-        if (!isMasked && !binding->enabled) {
+        if (!isMasked && !binding->grabbed) {
             HSDebug("KeyManager::setActiveKeymask(): Grabbing %s\n", name.c_str());
             xKeyGrabber_.grabKeyCombo(binding->keyCombo);
-            binding->enabled = true;
-        } else if (isMasked && binding->enabled) {
+            binding->grabbed = true;
+        } else if (isMasked && binding->grabbed) {
             HSDebug("KeyManager::setActiveKeymask(): Ungrabbing %s\n", name.c_str());
             xKeyGrabber_.ungrabKeyCombo(binding->keyCombo);
-            binding->enabled = false;
+            binding->grabbed = false;
         }
     }
     activeKeymask_ = newMask;
