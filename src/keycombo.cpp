@@ -164,7 +164,7 @@ KeySym KeyCombo::string2keysym(const string& str) {
     return keysym;
 }
 
-bool KeyCombo::operator==(const KeyCombo& other) {
+bool KeyCombo::operator==(const KeyCombo& other) const {
     bool sameMods = modifiers == other.modifiers;
     bool sameKeySym = keysym == other.keysym;
     return sameMods && sameKeySym;

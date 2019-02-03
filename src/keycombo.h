@@ -43,7 +43,7 @@ public:
     KeySym keysym;
     unsigned int modifiers;
 
-    bool operator==(const KeyCombo& other);
+    bool operator==(const KeyCombo& other) const;
 
 private:
     static std::vector<std::string> splitKeySpec(std::string keySpec);
