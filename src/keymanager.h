@@ -68,6 +68,8 @@ public:
     int listKeybindsCommand(Output output) const;
     int removeKeybindCommand(Input input, Output output);
 
+    void removeKeybindCompletion(Completion &complete);
+
     void handleKeyPress(XEvent* ev) const;
 
     void regrabAll();

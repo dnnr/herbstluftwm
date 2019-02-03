@@ -95,6 +95,16 @@ int KeyManager::removeKeybindCommand(Input input, Output output) {
     return HERBST_EXIT_SUCCESS;
 }
 
+void KeyManager::removeKeybindCompletion(Completion &complete) {
+    if (complete == 0) {
+        complete.full({ "-F", "--all", "--arsch" });
+
+        for (auto& binding : binds) {
+            complete.full(binding->keyCombo.str());
+        }
+    }
+}
+
 void KeyManager::handleKeyPress(XEvent* ev) const {
     KeyCombo pressed = xKeyGrabber_.xEventToKeyCombo(ev);
 
