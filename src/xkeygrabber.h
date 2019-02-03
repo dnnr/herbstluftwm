@@ -29,7 +29,7 @@ public:
 
 private:
     void changeGrabbedState(const KeyCombo& keyCombo, bool grabbed);
-    unsigned int numlockMask = 0;
+    unsigned int numlockMask_ = 0;
 
     void updateNumlockMask();
 };

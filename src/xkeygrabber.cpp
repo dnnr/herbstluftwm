@@ -10,13 +10,13 @@ void XKeyGrabber::updateNumlockMask() {
     unsigned int i, j;
     XModifierKeymap *modmap;
 
-    numlockMask = 0;
+    numlockMask_ = 0;
     modmap = XGetModifierMapping(g_display);
     for(i = 0; i < 8; i++)
         for(j = 0; j < modmap->max_keypermod; j++)
             if(modmap->modifiermap[i * modmap->max_keypermod + j]
                == XKeysymToKeycode(g_display, XK_Num_Lock))
-                numlockMask = (1 << i);
+                numlockMask_ = (1 << i);
     XFreeModifiermap(modmap);
 }
 
@@ -32,7 +32,7 @@ KeyCombo XKeyGrabber::xEventToKeyCombo(XEvent *ev) {
     combo.modifiers = ev->xkey.state;
 
     // Normalize
-    combo.modifiers &= ~(numlockMask | LockMask);
+    combo.modifiers &= ~(numlockMask_ | LockMask);
 
     return combo;
 }
@@ -55,7 +55,7 @@ void XKeyGrabber::ungrabAll() {
 void XKeyGrabber::changeGrabbedState(const KeyCombo& keyCombo, bool grabbed) {
     // List of ignored modifiers (key combo needs to be grabbed for each of
     // them):
-    const unsigned int ignModifiers[] = { 0, LockMask, numlockMask, numlockMask|LockMask };
+    const unsigned int ignModifiers[] = { 0, LockMask, numlockMask_, numlockMask_ | LockMask };
 
     KeyCode keycode = XKeysymToKeycode(g_display, keyCombo.keysym);
     if (!keycode) {
