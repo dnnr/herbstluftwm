@@ -25,25 +25,6 @@ const vector<KeyCombo::ModifierNameAndMask> KeyCombo::modifierMasks = {
     { "Ctrl",       ControlMask },
 };
 
-
-/*!
- * Provides the names of modifiers that are set in a given mask.
- */
-vector<string> KeyCombo::getNamesForModifierMask(unsigned int mask) {
-    vector<string> names;
-    for (auto& entry : modifierMasks) {
-        if (entry.mask & mask) {
-            names.push_back(entry.name);
-
-            // remove match from mask
-            mask = mask & ~ entry.mask;
-        }
-    }
-
-    return names;
-}
-
-
 /*!
  * Provides a canonical string representation of the key combo
  */
@@ -165,3 +146,21 @@ unsigned int KeyCombo::getMaskForModifierName(string name) {
 
     throw std::runtime_error("Unknown modifier name " + name);
 }
+
+/*!
+ * Provides the names of modifiers that are set in a given mask.
+ */
+vector<string> KeyCombo::getNamesForModifierMask(unsigned int mask) {
+    vector<string> names;
+    for (auto& entry : modifierMasks) {
+        if (entry.mask & mask) {
+            names.push_back(entry.name);
+
+            // remove match from mask
+            mask = mask & ~ entry.mask;
+        }
+    }
+
+    return names;
+}
+
