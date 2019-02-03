@@ -31,7 +31,6 @@ public:
      */
     static const std::vector<ModifierNameAndMask> modifierMasks;
 
-    static unsigned int getMaskForModifierName(std::string name);
 
     static std::vector<std::string> getNamesForModifierMask(unsigned int mask);
 
@@ -46,4 +45,5 @@ public:
 
 private:
     static std::vector<std::string> splitKeySpec(std::string keySpec);
+    static unsigned int getMaskForModifierName(std::string name);
 };
