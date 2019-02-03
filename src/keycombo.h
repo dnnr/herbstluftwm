@@ -13,7 +13,6 @@
 class KeyCombo {
 public:
     KeyCombo() = default;
-    std::string origstr; // just for debugging
 
     typedef struct {
         std::string name;

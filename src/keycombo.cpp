@@ -165,7 +165,6 @@ KeyCombo KeyCombo::fromString(const std::string& str) {
     KeyCombo combo;
     combo.modifiers = string2modifiers(str);
     combo.keysym = string2keysym(str);
-    combo.origstr = str;
     return combo;
 }
 
