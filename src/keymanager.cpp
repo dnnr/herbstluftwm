@@ -39,7 +39,7 @@ int KeyManager::addKeybindCommand(Input input, Output output) {
     auto newBinding = make_unique<KeyBinding>();
 
     try {
-        newBinding->keyCombo = KeyCombo(input.front());
+        newBinding->keyCombo = KeyCombo::fromString(input.front());
     } catch (std::runtime_error &error) {
         output << input.command() << ": " << error.what() << std::endl;
         return HERBST_INVALID_ARGUMENT;

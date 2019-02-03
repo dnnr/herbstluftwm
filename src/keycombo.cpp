@@ -40,19 +40,6 @@ unsigned int KeyCombo::getMaskForModifierName(string name) {
 }
 
 /*!
- * Creates a KeyCombo from a given string representation
- *
- * Example inputs: "Mod1-space", "Mod4+f", "f"
- *
- * \throws meaningful exceptions on parsing errors
- */
-KeyCombo::KeyCombo(string str) {
-    modifiers = string2modifiers(str);
-    keysym = string2keysym(str);
-    origstr = str;
-}
-
-/*!
  * Provides the names of modifiers that are set in a given mask.
  */
 vector<string> KeyCombo::getNamesForModifierMask(unsigned int mask) {
@@ -162,6 +149,24 @@ KeySym KeyCombo::string2keysym(const string& str) {
         throw std::runtime_error("Unknown KeySym \"" + lastToken + "\"");
     }
     return keysym;
+}
+
+/*!
+ * Creates a KeyCombo from a given string representation
+ *
+ * Example inputs: "Mod1-space", "Mod4+f", "f"
+ *
+ * In order to avoid throwing exceptions from constructors (they often get
+ * called implicitly), this is implemented as a static method.
+ *
+ * \throws meaningful exceptions on parsing errors
+ */
+KeyCombo KeyCombo::fromString(const std::string& str) {
+    KeyCombo combo;
+    combo.modifiers = string2modifiers(str);
+    combo.keysym = string2keysym(str);
+    combo.origstr = str;
+    return combo;
 }
 
 bool KeyCombo::operator==(const KeyCombo& other) const {

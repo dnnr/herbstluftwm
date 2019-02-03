@@ -13,7 +13,6 @@
 class KeyCombo {
 public:
     KeyCombo() = default;
-    KeyCombo(std::string str);
     std::string origstr; // just for debugging
 
     typedef struct {
@@ -39,6 +38,7 @@ public:
 
     static unsigned int string2modifiers(const std::string& str);
     static KeySym string2keysym(const std::string& str);
+    static KeyCombo fromString(const std::string& str);
 
     KeySym keysym;
     unsigned int modifiers;
