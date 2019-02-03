@@ -26,10 +26,6 @@ public:
         return other.str == str;
     }
 
-    bool operator!=(const Keymask& other) const {
-        return !(*this == other);
-    }
-
     std::string str;
     std::regex regex;
 };
