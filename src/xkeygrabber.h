@@ -22,6 +22,7 @@ public:
 
     void grabKeyCombo(const KeyCombo& keyCombo);
     void ungrabKeyCombo(const KeyCombo& keyCombo);
+    void ungrabAll();
 private:
     void changeGrabbedState(const KeyCombo& keyCombo, bool grabbed);
     unsigned int numlockMask = 0;

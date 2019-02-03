@@ -27,7 +27,7 @@ KeyManager::KeyManager() {
 }
 
 KeyManager::~KeyManager() {
-    ungrab_all();
+    xKeyGrabber_.ungrabAll();
 }
 
 int KeyManager::addKeybindCommand(Input input, Output output) {
@@ -84,7 +84,7 @@ int KeyManager::removeKeybindCommand(Input input, Output output) {
 
     if (arg == "--all" || arg == "-F") {
         binds.clear();
-        ungrab_all();
+        xKeyGrabber_.ungrabAll();
     } else {
         unsigned int modifiers;
         KeySym keysym;
@@ -99,7 +99,7 @@ int KeyManager::removeKeybindCommand(Input input, Output output) {
         if (key_remove_bind_with_keysym(modifiers, keysym) == false) {
             output << input.command() << ": Key \"" << arg << "\" is not bound\n";
         }
-        regrab_keys();
+        regrabAll();
     }
 
     return HERBST_EXIT_SUCCESS;
@@ -109,7 +109,7 @@ void KeyManager::regrabAll() {
     xKeyGrabber_.updateKeyboardMapping();
 
      // Remove all current grabs:
-    XUngrabKey(g_display, AnyKey, AnyModifier, g_root);
+    xKeyGrabber_.ungrabAll();
 
     for (auto& binding : binds) {
         xKeyGrabber_.grabKeyCombo(binding->keyCombo);

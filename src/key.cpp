@@ -67,35 +67,6 @@ bool key_remove_bind_with_keysym(unsigned int modifiers, KeySym keysym){
     return false;
 }
 
-void ungrab_all() {
-    update_numlockmask();
-    // init modifiers after updating numlockmask
-    XUngrabKey(g_display, AnyKey, AnyModifier, g_root); // remove all current grabs
-}
-
-void regrab_keys() {
-    ungrab_all();
-    for (auto& binding : Root::get()->keys()->binds) {
-        grab_keybind(binding.get());
-    }
-}
-
-void grab_keybind(KeyBinding* binding) {
-    unsigned int modifiers[] = { 0, LockMask, numlockmask, numlockmask|LockMask };
-    KeyCode keycode = XKeysymToKeycode(g_display, binding->keyCombo.keysym);
-    if (!keycode) {
-        // ignore unknown keysyms
-        return;
-    }
-    // grab key for each modifier that is ignored (capslock, numlock)
-    for (int i = 0; i < LENGTH(modifiers); i++) {
-        XGrabKey(g_display, keycode, modifiers[i]|binding->keyCombo.modifiers, g_root,
-                 True, GrabModeAsync, GrabModeAsync);
-    }
-    // mark the keybinding as enabled
-    binding->enabled = true;
-}
-
 // update the numlockmask
 // from dwm.c
 void update_numlockmask() {

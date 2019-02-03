@@ -29,6 +29,11 @@ void XKeyGrabber::ungrabKeyCombo(const KeyCombo& keyCombo) {
     changeGrabbedState(keyCombo, false);
 }
 
+//! Removes all grabbed keys (without knowing them)
+void XKeyGrabber::ungrabAll() {
+    XUngrabKey(g_display, AnyKey, AnyModifier, g_root);
+}
+
 void XKeyGrabber::changeGrabbedState(const KeyCombo& keyCombo, bool grabbed) {
     // List of ignored modifiers (key combo needs to be grabbed for each of
     // them):
