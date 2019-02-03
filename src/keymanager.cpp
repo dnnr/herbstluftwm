@@ -132,16 +132,11 @@ void KeyManager::regrabAll() {
  * updated.
  */
 void KeyManager::ensureKeymask(const Client* client) {
-    std::string targetMaskStr;
     if (client == nullptr) {
         client = Root::get()->clients()->focus();
     }
 
-    if (client == nullptr) {
-        targetMaskStr = "";
-    } else {
-        targetMaskStr = client->keymask_();
-    }
+    std::string targetMaskStr = (client != nullptr) ? client->keymask_() : "";
 
     if (activeKeymask_.str != targetMaskStr) {
         try {
