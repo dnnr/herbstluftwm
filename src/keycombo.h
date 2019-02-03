@@ -19,10 +19,6 @@ public:
         unsigned int mask;
     } ModifierNameAndMask;
 
-    std::string str() const;
-
-    bool matches(const std::regex& regex) const;
-
     /*!
      * List of existing modifiers and their corresponding key masks.
      *
@@ -30,6 +26,10 @@ public:
      * we need well-defined reverse lookups for stringification.
      */
     static const std::vector<ModifierNameAndMask> modifierMasks;
+
+    std::string str() const;
+
+    bool matches(const std::regex& regex) const;
 
     static unsigned int string2modifiers(const std::string& str);
     static KeySym string2keysym(const std::string& str);
