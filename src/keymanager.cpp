@@ -144,7 +144,7 @@ void KeyManager::ensureKeymask(const Client* client) {
             auto newMask = Keymask::fromString(targetMaskStr);
             setActiveKeymask(newMask);
         } catch (std::regex_error& err) {
-            HSDebug("KeyManager::ensureKeymask(): Can not apply invalid regex \"%s\": %s\n",
+            HSWarning("Failed to parse keymask \"%s\"is invalid (falling back to empty mask): %s\n",
                     targetMaskStr.c_str(), err.what());
 
             // Fall back to empty mask:
