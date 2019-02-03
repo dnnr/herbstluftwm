@@ -2,6 +2,9 @@
 
 #include "keycombo.h"
 
+/*!
+ * Simple container class for tracking a keybinding
+ */
 class KeyBinding {
 public:
     KeyCombo keyCombo;
