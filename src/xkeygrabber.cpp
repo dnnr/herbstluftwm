@@ -68,11 +68,9 @@ void XKeyGrabber::changeGrabbedState(const KeyCombo& keyCombo, bool grabbed) {
     // grab/ungrab key for each modifier that is ignored (capslock, numlock)
     for (auto& ignModifier : ignModifiers) {
         if (grabbed) {
-            HSDebug("XKeyGrabber: ungrabbing %s for mod %i\n", keyCombo.origstr.c_str(), ignModifier);
             XGrabKey(g_display, keycode, ignModifier | keyCombo.modifiers, g_root,
                     True, GrabModeAsync, GrabModeAsync);
         } else {
-            HSDebug("XKeyGrabber: ungrabbing %s for mod %i\n", keyCombo.origstr.c_str(), ignModifier);
             XUngrabKey(g_display, keycode, ignModifier | keyCombo.modifiers, g_root);
         }
     }

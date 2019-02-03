@@ -162,11 +162,9 @@ void KeyManager::setActiveKeymask(const Keymask& newMask) {
         bool isMasked = binding->keyCombo.matches(newMask.regex);
 
         if (!isMasked && !binding->grabbed) {
-            HSDebug("KeyManager::setActiveKeymask(): Grabbing %s\n", name.c_str());
             xKeyGrabber_.grabKeyCombo(binding->keyCombo);
             binding->grabbed = true;
         } else if (isMasked && binding->grabbed) {
-            HSDebug("KeyManager::setActiveKeymask(): Ungrabbing %s\n", name.c_str());
             xKeyGrabber_.ungrabKeyCombo(binding->keyCombo);
             binding->grabbed = false;
         }
