@@ -14,9 +14,7 @@
  */
 class XKeyGrabber {
 public:
-    XKeyGrabber() {
-        updateNumlockMask();
-    }
+    XKeyGrabber();
 
     void updateNumlockMask();
 

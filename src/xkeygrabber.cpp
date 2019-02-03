@@ -6,6 +6,11 @@
 
 #include "globals.h"
 
+XKeyGrabber::XKeyGrabber() {
+    updateNumlockMask();
+}
+
+//! Obtains the current numlock mask value
 void XKeyGrabber::updateNumlockMask() {
     unsigned int i, j;
     XModifierKeymap *modmap;
@@ -55,6 +60,7 @@ void XKeyGrabber::ungrabAll() {
     XUngrabKey(g_display, AnyKey, AnyModifier, g_root);
 }
 
+//! Grabs/ungrabs a given key combo
 void XKeyGrabber::changeGrabbedState(const KeyCombo& keyCombo, bool grabbed) {
     // List of ignored modifiers (key combo needs to be grabbed for each of
     // them):
