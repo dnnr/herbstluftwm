@@ -44,7 +44,7 @@ class KeyManager : public Object {
         std::regex regex;
     };
 public:
-    KeyManager();
+    KeyManager() = default;
     ~KeyManager();
 
     int addKeybindCommand(Input input, Output output);
