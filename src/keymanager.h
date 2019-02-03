@@ -8,7 +8,6 @@
 #include <string>
 #include <vector>
 
-#include "keybinding.h"
 #include "object.h"
 #include "types.h"
 #include "xkeygrabber.h"
@@ -48,6 +47,19 @@ class KeyManager : public Object {
         std::string str;
         std::regex regex;
     };
+
+    /*!
+     * Simple container class for tracking a keybinding (supposed for internally
+     * use by KeyManager, but still used elsewhere; TODO: fix that)
+     */
+public:
+    class KeyBinding {
+    public:
+        KeyCombo keyCombo;
+        std::vector<std::string> cmd;
+        bool grabbed;
+    };
+
 public:
     KeyManager() = default;
     ~KeyManager();

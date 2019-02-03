@@ -14,7 +14,6 @@
 #include "ipc-protocol.h"
 #include "keycombo.h"
 #include "keymanager.h"
-#include "keybinding.h"
 #include "root.h"
 #include "utils.h"
 
@@ -29,7 +28,7 @@ struct key_find_context {
     size_t      needle_len;
 };
 
-static void key_find_binds_helper(KeyBinding* b, struct key_find_context* c) {
+static void key_find_binds_helper(KeyManager::KeyBinding* b, struct key_find_context* c) {
     auto name = b->keyCombo.str();
     if (name.find(c->needle) == 0) {
         /* add to output if key starts with searched needle */
