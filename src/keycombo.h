@@ -31,8 +31,6 @@ public:
      */
     static const std::vector<ModifierNameAndMask> modifierMasks;
 
-
-
     static unsigned int string2modifiers(const std::string& str);
     static KeySym string2keysym(const std::string& str);
     static KeyCombo fromString(const std::string& str);
