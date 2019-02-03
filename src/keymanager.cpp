@@ -158,7 +158,7 @@ void KeyManager::ensureKeymask(const Client* client) {
     if (activeKeymask_.str != targetMaskStr) {
         try {
             HSDebug("KeyManager::ensureKeymask(): Applying new keymask: \"%s\"\n", targetMaskStr.c_str());
-            Keymask newMask(targetMaskStr);
+            auto newMask = Keymask::fromString(targetMaskStr);
             setActiveKeymask(newMask);
         } catch (std::regex_error& err) {
             HSDebug("KeyManager::ensureKeymask(): Can not apply invalid regex \"%s\": %s\n",
@@ -190,6 +190,12 @@ void KeyManager::setActiveKeymask(const Keymask& newMask) {
         }
     }
     activeKeymask_ = newMask;
+}
+
+//! Set the active keymask to an empty exception
+void KeyManager::clearActiveKeymask() {
+    auto newMask = Keymask::fromString("");
+    setActiveKeymask(newMask);
 }
 
 /*!

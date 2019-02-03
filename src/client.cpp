@@ -175,7 +175,7 @@ void Client::window_unfocus_last() {
         tag_update_each_focus_layer();
 
         // Enable all keys in the root window
-        Root::get()->keys()->setActiveKeymask({""});
+        Root::get()->keys()->clearActiveKeymask();
     }
     lastfocus = 0;
 }

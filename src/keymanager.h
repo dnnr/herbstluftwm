@@ -13,13 +13,18 @@
 
 class Keymask {
 public:
-    Keymask(const std::string& maskStr = "")
-        : str(maskStr)
-    {
+    /*!
+     * Creates a Keymask object from the given regex string
+     *
+     * /throws exceptions thrown by std::regex
+     */
+    static Keymask fromString(const std::string& str = "") {
+        Keymask ret;
         if (str != "") {
             // Simply pass on any exceptions thrown here:
-            regex = std::regex(str, std::regex::extended);
+            ret.regex = std::regex(str, std::regex::extended);
         }
+        return ret;
     }
 
     bool operator==(const Keymask& other) const {
@@ -44,6 +49,7 @@ public:
     void regrabAll();
     void ensureKeymask(const Client* client = nullptr);
     void setActiveKeymask(const Keymask& newMask);
+    void clearActiveKeymask();
 
     // TODO: This is not supposed to exist. It only does as a workaround,
     // because mouse.cpp still wants to know the numlock mask.
