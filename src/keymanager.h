@@ -41,10 +41,10 @@ public:
     ~KeyManager();
 
     int addKeybindCommand(Input input, Output output);
-    int listKeybindsCommand(Output output);
+    int listKeybindsCommand(Output output) const;
     int removeKeybindCommand(Input input, Output output);
 
-    void handleKeyPress(XEvent* ev);
+    void handleKeyPress(XEvent* ev) const;
 
     void regrabAll();
     void ensureKeymask(const Client* client = nullptr);

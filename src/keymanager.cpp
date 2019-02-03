@@ -65,7 +65,7 @@ int KeyManager::addKeybindCommand(Input input, Output output) {
     return HERBST_EXIT_SUCCESS;
 }
 
-int KeyManager::listKeybindsCommand(Output output) {
+int KeyManager::listKeybindsCommand(Output output) const {
     for (auto& binding : binds) {
         // add key combo
         output << binding->keyCombo.str();
@@ -105,7 +105,7 @@ int KeyManager::removeKeybindCommand(Input input, Output output) {
     return HERBST_EXIT_SUCCESS;
 }
 
-void KeyManager::handleKeyPress(XEvent* ev) {
+void KeyManager::handleKeyPress(XEvent* ev) const {
     KeyCombo pressed = xKeyGrabber_.xEventToKeyCombo(ev);
 
     auto found = std::find_if(binds.begin(), binds.end(),

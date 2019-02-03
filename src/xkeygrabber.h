@@ -21,7 +21,7 @@ public:
         updateNumlockMask();
     }
 
-    KeyCombo xEventToKeyCombo(XEvent *ev);
+    KeyCombo xEventToKeyCombo(XEvent *ev) const;
 
     void grabKeyCombo(const KeyCombo& keyCombo);
     void ungrabKeyCombo(const KeyCombo& keyCombo);
