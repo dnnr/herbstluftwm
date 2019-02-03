@@ -25,10 +25,10 @@ public:
     bool matches(const std::regex& regex) const;
 
     /*!
-     * List of modifiers and their corresponding key masks.
+     * List of existing modifiers and their corresponding key masks.
      *
-     * This is not an std::map because even though this an surjective relation,
-     * we need well-defined reverse lookups (from mask to string).
+     * This is not an std::map because even though it is a surjective relation,
+     * we need well-defined reverse lookups for stringification.
      */
     static const std::vector<ModifierNameAndMask> modifierMasks;
 
