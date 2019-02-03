@@ -21,50 +21,6 @@ using std::string;
 using std::unique_ptr;
 using std::vector;
 
-static unsigned int numlockmask = 0;
-#define CLEANMASK(mask)         (mask & ~(numlockmask|LockMask))
-
-unsigned int* get_numlockmask_ptr() {
-    return &numlockmask;
-}
-
-static gint keysym_equals(const KeyCombo* a, const KeyCombo* b) {
-    bool equal = (CLEANMASK(a->modifiers) == CLEANMASK(b->modifiers));
-    equal = equal && (a->keysym == b->keysym);
-    return equal ? 0 : -1;
-}
-
-bool key_remove_bind_with_keysym(unsigned int modifiers, KeySym keysym){
-    KeyCombo combo;
-    combo.modifiers = modifiers;
-    combo.keysym = keysym;
-    // search this keysym in list and remove it
-    auto& binds = Root::get()->keys()->binds;
-    for (auto iter = binds.begin(); iter != binds.end(); iter++) {
-        if (keysym_equals(&combo, &((*iter)->keyCombo)) == 0) {
-            binds.erase(iter);
-            return true;
-        }
-    }
-    return false;
-}
-
-// update the numlockmask
-// from dwm.c
-void update_numlockmask() {
-    unsigned int i, j;
-    XModifierKeymap *modmap;
-
-    numlockmask = 0;
-    modmap = XGetModifierMapping(g_display);
-    for(i = 0; i < 8; i++)
-        for(j = 0; j < modmap->max_keypermod; j++)
-            if(modmap->modifiermap[i * modmap->max_keypermod + j]
-               == XKeysymToKeycode(g_display, XK_Num_Lock))
-                numlockmask = (1 << i);
-    XFreeModifiermap(modmap);
-}
-
 // STRTODO
 struct key_find_context {
     Output      output;

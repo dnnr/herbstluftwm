@@ -49,10 +49,18 @@ public:
     void ensureKeymask(const Client* client = nullptr);
     void setActiveKeymask(const Keymask& newMask);
 
+    // TODO: This is not supposed to exist. It only does as a workaround,
+    // because mouse.cpp still wants to know the numlock mask.
+    unsigned int getNumlockMask() const {
+        return xKeyGrabber_.getNumlockMask();
+    }
+
     //! Currently defined keybindings (TODO: Make this private as soon as possible)
     std::vector<std::unique_ptr<KeyBinding>> binds;
 
 private:
+    bool removeKeybinding(const KeyCombo& comboToRemove);
+
     XKeyGrabber xKeyGrabber_;
 
     // The last known keymask (for comparison on change)

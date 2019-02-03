@@ -24,7 +24,6 @@ typedef struct {
 extern Name2Modifier g_modifier_names[];
 
 KeyManager::KeyManager() {
-    update_numlockmask();
 }
 
 KeyManager::~KeyManager() {
@@ -49,8 +48,8 @@ int KeyManager::addKeybindCommand(Input input, Output output) {
     // Store remaining input as the associated command
     newBinding->cmd = {input.begin(), input.end()};
 
-    // Remove existing binding with same keysym/modifiers
-    key_remove_bind_with_keysym(newBinding->keyCombo.modifiers, newBinding->keyCombo.keysym);
+    // Make sure there is no existing binding with same keysym/modifiers
+    removeKeybinding(newBinding->keyCombo);
 
     if (!newBinding->keyCombo.matches(activeKeymask_.regex)) {
         // Grab for events on this keycode
@@ -87,20 +86,20 @@ int KeyManager::removeKeybindCommand(Input input, Output output) {
         binds.clear();
         xKeyGrabber_.ungrabAll();
     } else {
-        unsigned int modifiers;
-        KeySym keysym;
+        KeyCombo comboToRemove;
         try {
-            modifiers = KeyCombo::string2modifiers(arg);
-            keysym = KeyCombo::string2keysym(arg);
+            comboToRemove = KeyCombo::fromString(arg);
         } catch (std::runtime_error &error) {
             output << input.command() << ": " << arg << ": " << error.what() << "\n";
             return HERBST_INVALID_ARGUMENT;
         }
 
-        if (key_remove_bind_with_keysym(modifiers, keysym) == false) {
+        // Remove binding (or moan if none was found)
+        if (removeKeybinding(comboToRemove)) {
+            regrabAll();
+        } else {
             output << input.command() << ": Key \"" << arg << "\" is not bound\n";
         }
-        regrabAll();
     }
 
     return HERBST_EXIT_SUCCESS;
@@ -191,4 +190,28 @@ void KeyManager::setActiveKeymask(const Keymask& newMask) {
         }
     }
     activeKeymask_ = newMask;
+}
+
+/*!
+ * Removes a given key combo from the list of bindings (no ungrabbing)
+ *
+ * \return True if a matching binding was found and removed
+ * \return False if no matching binding was found
+ */
+bool KeyManager::removeKeybinding(const KeyCombo& comboToRemove) {
+    // Find binding to remove
+    auto removeIter = binds.begin();
+    for (; removeIter != binds.end(); removeIter++) {
+        if (comboToRemove == (*removeIter)->keyCombo) {
+            break;
+        }
+    }
+
+    if (removeIter == binds.end()) {
+        return False; // no matching binding found
+    }
+
+    // Remove binding
+    binds.erase(removeIter);
+    return True;
 }
