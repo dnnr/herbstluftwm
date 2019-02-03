@@ -16,13 +16,6 @@ using std::string;
 using std::unique_ptr;
 using std::vector;
 
-typedef struct {
-    const char* name;
-    unsigned int mask;
-} Name2Modifier;
-
-extern Name2Modifier g_modifier_names[];
-
 KeyManager::KeyManager() {
 }
 
