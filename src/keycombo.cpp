@@ -51,24 +51,8 @@ std::string KeyCombo::str() const {
     std::stringstream str;
 
     /* add modifiers */
-    unsigned int old_mask = 0, new_mask = modifiers;
-    while (new_mask != 0 && new_mask != old_mask) {
-        old_mask = new_mask;
-
-        // reverse lookup modifier name by its mask
-        string name;
-        unsigned int mask = 0;
-        for (auto &strToMask : KeyCombo::modifierMasks) {
-            if (strToMask.mask & old_mask) {
-                name = strToMask.name;
-                mask = strToMask.mask;
-                break;
-            }
-        }
-
-        str << name << KEY_COMBI_SEPARATORS[0];
-        /* remove found mask from mask */
-        new_mask = old_mask & ~ mask;
+    for (auto& modName : getNamesForModifierMask(modifiers)) {
+        str << modName << KEY_COMBI_SEPARATORS[0];
     }
 
     /* add keysym */
