@@ -144,7 +144,7 @@ unsigned int KeyCombo::getMaskForModifierName(string name) {
         }
     }
 
-    throw std::runtime_error("Unknown modifier name " + name);
+    throw std::runtime_error("Unknown modifier \"" + name + "\"");
 }
 
 /*!
