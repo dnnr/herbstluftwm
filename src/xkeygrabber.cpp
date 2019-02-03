@@ -12,11 +12,14 @@ void XKeyGrabber::updateNumlockMask() {
 
     numlockMask_ = 0;
     modmap = XGetModifierMapping(g_display);
-    for(i = 0; i < 8; i++)
-        for(j = 0; j < modmap->max_keypermod; j++)
-            if(modmap->modifiermap[i * modmap->max_keypermod + j]
-               == XKeysymToKeycode(g_display, XK_Num_Lock))
+    for (i = 0; i < 8; i++) {
+        for (j = 0; j < modmap->max_keypermod; j++) {
+            if (modmap->modifiermap[i * modmap->max_keypermod + j]
+                    == XKeysymToKeycode(g_display, XK_Num_Lock)) {
                 numlockMask_ = (1 << i);
+            }
+        }
+    }
     XFreeModifiermap(modmap);
 }
 
