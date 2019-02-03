@@ -22,7 +22,13 @@ typedef struct {
 
 extern Name2Modifier g_modifier_names[];
 
-extern vector<unique_ptr<KeyBinding>> g_key_binds;
+KeyManager::KeyManager() {
+    update_numlockmask();
+}
+
+KeyManager::~KeyManager() {
+    ungrab_all();
+}
 
 int KeyManager::addKeybindCommand(Input input, Output output) {
     if (input.size() < 2) {
@@ -52,7 +58,7 @@ int KeyManager::addKeybindCommand(Input input, Output output) {
     }
 
     // Add keybinding to list
-    g_key_binds.push_back(std::move(newBinding));
+    binds.push_back(std::move(newBinding));
 
     ensureKeymask();
 
@@ -60,7 +66,7 @@ int KeyManager::addKeybindCommand(Input input, Output output) {
 }
 
 int KeyManager::listKeybindsCommand(Output output) {
-    for (auto& binding : g_key_binds) {
+    for (auto& binding : binds) {
         // add key combo
         output << binding->keyCombo.str();
         // add associated command
@@ -77,7 +83,8 @@ int KeyManager::removeKeybindCommand(Input input, Output output) {
     }
 
     if (arg == "--all" || arg == "-F") {
-        key_remove_all_binds();
+        binds.clear();
+        ungrab_all();
     } else {
         unsigned int modifiers;
         KeySym keysym;
@@ -104,7 +111,7 @@ void KeyManager::regrabAll() {
      // Remove all current grabs:
     XUngrabKey(g_display, AnyKey, AnyModifier, g_root);
 
-    for (auto& binding : g_key_binds) {
+    for (auto& binding : binds) {
         xKeyGrabber_.grabKeyCombo(binding->keyCombo);
         binding->enabled = true;
     }
@@ -152,7 +159,7 @@ void KeyManager::ensureKeymask(const Client* client) {
 
 //! Apply new keymask by grabbing/ungrabbing current bindings accordingly
 void KeyManager::setActiveKeymask(const Keymask& newMask) {
-    for (auto& binding : g_key_binds) {
+    for (auto& binding : binds) {
         auto name = binding->keyCombo.str();
         bool isMasked = binding->keyCombo.matches(newMask.regex);
 

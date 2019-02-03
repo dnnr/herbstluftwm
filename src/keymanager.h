@@ -1,8 +1,15 @@
 #pragma once
 
-#include "xkeygrabber.h"
-#include "object.h"
+#include <X11/Xlib.h>
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "client.h"
+#include "keybinding.h"
+#include "object.h"
+#include "types.h"
+#include "xkeygrabber.h"
 
 class Keymask {
 public:
@@ -29,6 +36,9 @@ public:
 
 class KeyManager : public Object {
 public:
+    KeyManager();
+    ~KeyManager();
+
     int addKeybindCommand(Input input, Output output);
     int listKeybindsCommand(Output output);
     int removeKeybindCommand(Input input, Output output);
@@ -36,6 +46,9 @@ public:
     void regrabAll();
     void ensureKeymask(const Client* client = nullptr);
     void setActiveKeymask(const Keymask& newMask);
+
+    //! Currently defined keybindings (TODO: Make this private as soon as possible)
+    std::vector<std::unique_ptr<KeyBinding>> binds;
 
 private:
     XKeyGrabber xKeyGrabber_;

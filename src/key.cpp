@@ -8,12 +8,13 @@
 #include <regex>
 #include <string>
 
-#include "client.h"
 #include "command.h"
 #include "glib-backports.h"
 #include "globals.h"
 #include "ipc-protocol.h"
 #include "keycombo.h"
+#include "keymanager.h"
+#include "root.h"
 #include "utils.h"
 
 using std::string;
@@ -27,22 +28,6 @@ unsigned int* get_numlockmask_ptr() {
     return &numlockmask;
 }
 
-// TODO: Turn this into a private member of KeyManager as soon as possible.
-vector<unique_ptr<KeyBinding>> g_key_binds = {};
-
-void key_init() {
-    update_numlockmask();
-}
-
-void key_destroy() {
-    key_remove_all_binds();
-}
-
-void key_remove_all_binds() {
-    g_key_binds.clear();
-    regrab_keys();
-}
-
 static gint keysym_equals(const KeyCombo* a, const KeyCombo* b) {
     bool equal = (CLEANMASK(a->modifiers) == CLEANMASK(b->modifiers));
     equal = equal && (a->keysym == b->keysym);
@@ -53,11 +38,12 @@ void handle_key_press(XEvent* ev) {
     KeyCombo pressed;
     pressed.keysym = XkbKeycodeToKeysym(g_display, ev->xkey.keycode, 0, 0);
     pressed.modifiers = ev->xkey.state;
-    auto found = std::find_if(g_key_binds.begin(), g_key_binds.end(),
+    auto& binds = Root::get()->keys()->binds;
+    auto found = std::find_if(binds.begin(), binds.end(),
             [=](const unique_ptr<KeyBinding> &other) {
                 return keysym_equals(&pressed, &(other->keyCombo)) == 0;
                 });
-    if (found != g_key_binds.end()) {
+    if (found != binds.end()) {
         // call the command
         std::ostringstream discardedOutput;
         auto& cmd = (*found)->cmd;
@@ -71,20 +57,25 @@ bool key_remove_bind_with_keysym(unsigned int modifiers, KeySym keysym){
     combo.modifiers = modifiers;
     combo.keysym = keysym;
     // search this keysym in list and remove it
-    for (auto iter = g_key_binds.begin(); iter != g_key_binds.end(); iter++) {
+    auto& binds = Root::get()->keys()->binds;
+    for (auto iter = binds.begin(); iter != binds.end(); iter++) {
         if (keysym_equals(&combo, &((*iter)->keyCombo)) == 0) {
-            g_key_binds.erase(iter);
+            binds.erase(iter);
             return true;
         }
     }
     return false;
 }
 
-void regrab_keys() {
+void ungrab_all() {
     update_numlockmask();
     // init modifiers after updating numlockmask
     XUngrabKey(g_display, AnyKey, AnyModifier, g_root); // remove all current grabs
-    for (auto& binding : g_key_binds) {
+}
+
+void regrab_keys() {
+    ungrab_all();
+    for (auto& binding : Root::get()->keys()->binds) {
         grab_keybind(binding.get());
     }
 }
@@ -140,7 +131,7 @@ void key_find_binds(const char* needle, Output output) {
     struct key_find_context c = {
         output, needle, strlen(needle)
     };
-    for (auto& binding : g_key_binds) {
+    for (auto& binding : Root::get()->keys()->binds) {
         key_find_binds_helper(binding.get(), &c);
     }
 }
