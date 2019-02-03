@@ -1,15 +1,20 @@
 #pragma once
 
 #include <X11/Xlib.h>
+#include <map>
 #include <memory>
+#include <regex>
+#include <sstream>
 #include <string>
 #include <vector>
 
-#include "client.h"
 #include "keybinding.h"
 #include "object.h"
 #include "types.h"
 #include "xkeygrabber.h"
+
+class Client;
+class KeyCombo;
 
 /*!
  * Maintains the list of key bindings, and handles the grabbing/ungrabbing with

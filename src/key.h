@@ -1,11 +1,6 @@
 #ifndef __HERBST_KEY_H_
 #define __HERBST_KEY_H_
 
-#include <X11/Xlib.h>
-
-#include "glib-backports.h"
-#include "keybinding.h"
-#include "keycombo.h"
 #include "types.h"
 
 #define KEY_COMBI_SEPARATORS "+-"

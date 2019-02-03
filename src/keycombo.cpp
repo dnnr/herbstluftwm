@@ -1,9 +1,11 @@
 #include "keycombo.h"
 
+#include <X11/Xlib.h>
 #include <algorithm>
+#include <iostream>
+#include <stdexcept>
 
 #include "globals.h"
-#include "utils.h"
 
 using std::vector;
 using std::string;

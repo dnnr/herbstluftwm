@@ -14,6 +14,7 @@
 #include "ipc-protocol.h"
 #include "keycombo.h"
 #include "keymanager.h"
+#include "keybinding.h"
 #include "root.h"
 #include "utils.h"
 

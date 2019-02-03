@@ -1,8 +1,8 @@
 #pragma once
 
 #include <X11/X.h>
-#include <iostream>
 #include <regex>
+#include <string>
 #include <vector>
 
 /*!
