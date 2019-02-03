@@ -6,7 +6,8 @@
 #include "keycombo.h"
 
 /*!
- * Handles the actual grabbing/releasing of given key combinations.
+ * Handles the actual grabbing/releasing of given key combinations, and
+ * maintains knowledge of the current keyboard layout
  *
  * Expects to be notified about keyboard mapping changes so that it can keep
  * track of the current numlock mask value.
