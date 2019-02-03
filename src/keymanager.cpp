@@ -16,6 +16,33 @@ using std::string;
 using std::unique_ptr;
 using std::vector;
 
+//! Simple parser and container for a keymask regex
+class Keymask {
+public:
+    /*!
+     * Creates a Keymask object from the given regex string
+     *
+     * /throws exceptions thrown by std::regex
+     */
+    static Keymask fromString(const std::string& str = "") {
+        Keymask ret;
+        if (str != "") {
+            // Simply pass on any exceptions thrown here:
+            ret.regex = std::regex(str, std::regex::extended);
+        }
+        return ret;
+    }
+
+    bool operator==(const Keymask& other) const {
+        return other.str == str;
+    }
+
+    std::string str;
+    std::regex regex;
+};
+
+
+
 KeyManager::KeyManager() {
 }
 

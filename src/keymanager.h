@@ -11,31 +11,38 @@
 #include "types.h"
 #include "xkeygrabber.h"
 
-class Keymask {
-public:
-    /*!
-     * Creates a Keymask object from the given regex string
-     *
-     * /throws exceptions thrown by std::regex
-     */
-    static Keymask fromString(const std::string& str = "") {
-        Keymask ret;
-        if (str != "") {
-            // Simply pass on any exceptions thrown here:
-            ret.regex = std::regex(str, std::regex::extended);
-        }
-        return ret;
-    }
-
-    bool operator==(const Keymask& other) const {
-        return other.str == str;
-    }
-
-    std::string str;
-    std::regex regex;
-};
-
+/*!
+ * Maintains the list of key bindings, and handles the grabbing/ungrabbing with
+ * the help of XKeyGrabber
+ */
 class KeyManager : public Object {
+    /*!
+     * Simple parser/container for a keymask regex (only needed internally by
+     * KeyManager)
+     */
+    class Keymask {
+    public:
+        /*!
+         * Creates a Keymask object from the given regex string
+         *
+         * /throws exceptions thrown by std::regex
+         */
+        static Keymask fromString(const std::string& str = "") {
+            Keymask ret;
+            if (str != "") {
+                // Simply pass on any exceptions thrown here:
+                ret.regex = std::regex(str, std::regex::extended);
+            }
+            return ret;
+        }
+
+        bool operator==(const Keymask& other) const {
+            return other.str == str;
+        }
+
+        std::string str;
+        std::regex regex;
+    };
 public:
     KeyManager();
     ~KeyManager();
