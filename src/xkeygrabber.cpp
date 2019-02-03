@@ -26,7 +26,7 @@ void XKeyGrabber::updateNumlockMask() {
 /*!
  * Derives a "normalized" KeyCombo from a given event.
  *
- * Normalization means stripping any ignored modifiers from modifier mask
+ * Normalization means stripping any ignored modifiers from the modifier mask
  * (including the runtime-defined Numlock mask).
  */
 KeyCombo XKeyGrabber::xEventToKeyCombo(XEvent *ev) const {
