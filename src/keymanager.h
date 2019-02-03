@@ -22,11 +22,11 @@ public:
         }
     }
 
-    bool operator==(const Keymask& other) {
+    bool operator==(const Keymask& other) const {
         return other.str == str;
     }
 
-    bool operator!=(const Keymask& other) {
+    bool operator!=(const Keymask& other) const {
         return !(*this == other);
     }
 
