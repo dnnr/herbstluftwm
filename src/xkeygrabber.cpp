@@ -62,10 +62,11 @@ void XKeyGrabber::changeGrabbedState(const KeyCombo& keyCombo, bool grabbed) {
 
     KeyCode keycode = XKeysymToKeycode(g_display, keyCombo.keysym);
     if (!keycode) {
-        // ignore unknown keysyms
+        // Ignore unknown keysym
         return;
     }
-    // grab/ungrab key for each modifier that is ignored (capslock, numlock)
+
+    // Grab/ungrab key for each modifier that is ignored (capslock, numlock)
     for (auto& ignModifier : ignModifiers) {
         if (grabbed) {
             XGrabKey(g_display, keycode, ignModifier | keyCombo.modifiers, g_root,
