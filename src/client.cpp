@@ -219,12 +219,8 @@ void Client::window_focus() {
     tag_update_focus_layer(get_current_monitor()->tag);
     grab_client_buttons(this, true);
 
-    // key_set_keymask(this->keymask_());
-    // TODO: Wouldn't the following be better done as a changed() handler on
-    // ClientManager::focus? Currently it's not possible because that's a
-    // Child_ and not an Attribute_.
     // XXX: At this point, ClientManager does not yet know about the focus
-    // change, so as a workaround, we pass ourselves to KeyManager.
+    // change. So as a workaround, we pass ourselves directly to KeyManager:
     Root::get()->keys()->ensureKeymask(this);
 
     this->set_urgent(false);
