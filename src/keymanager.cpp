@@ -138,21 +138,20 @@ void KeyManager::ensureKeymask(const Client* client) {
 
     std::string targetMaskStr = (client != nullptr) ? client->keymask_() : "";
 
-    if (activeKeymask_.str != targetMaskStr) {
-        try {
-            HSDebug("KeyManager::ensureKeymask(): Applying new keymask: \"%s\"\n", targetMaskStr.c_str());
-            auto newMask = Keymask::fromString(targetMaskStr);
-            setActiveKeymask(newMask);
-        } catch (std::regex_error& err) {
-            HSWarning("Failed to parse keymask \"%s\"is invalid (falling back to empty mask): %s\n",
-                    targetMaskStr.c_str(), err.what());
+    if (activeKeymask_.str == targetMaskStr) {
+        // nothing to do
+        return;
+    }
 
-            // Fall back to empty mask:
-            setActiveKeymask({});
-        }
+    try {
+        auto newMask = Keymask::fromString(targetMaskStr);
+        setActiveKeymask(newMask);
+    } catch (std::regex_error& err) {
+        HSWarning("Failed to parse keymask \"%s\"is invalid (falling back to empty mask): %s\n",
+                targetMaskStr.c_str(), err.what());
 
-    } else {
-        HSDebug("KeyManager::ensureKeymask(): nothing to do (keymask is still \"%s\")\n", activeKeymask_.str.c_str());
+        // Fall back to empty mask:
+        setActiveKeymask({});
     }
 }
 
