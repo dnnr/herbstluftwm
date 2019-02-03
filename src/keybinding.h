@@ -9,6 +9,9 @@ public:
     //! Command to call
     std::vector<std::string> cmd;
 
-    // TODO: Rename this to "grabbed"
-    bool    enabled;  // Is the keybinding already grabbed
+    //! Whether this binding is currently grabbed
+    // bool grabbed;
+
+    // temporarily:
+    bool enabled;
 };
