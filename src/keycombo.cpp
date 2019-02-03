@@ -114,7 +114,6 @@ unsigned int KeyCombo::string2modifiers(const string& str) {
     auto splitted = splitKeySpec(str);
 
     if (splitted.empty()) {
-        HSWarning("empty keysym\n");
         throw std::runtime_error("Empty keysym");
     }
 
@@ -147,7 +146,6 @@ KeySym KeyCombo::string2keysym(const string& str) {
     auto lastToken = splitKeySpec(str).back();
     auto keysym = XStringToKeysym(lastToken.c_str());
     if (keysym == NoSymbol) {
-        HSWarning("unknown KeySym \"%s\"\n", lastToken.c_str());
         throw std::runtime_error("Unknown KeySym \"" + lastToken + "\"");
     }
     return keysym;

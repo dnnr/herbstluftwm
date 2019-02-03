@@ -139,10 +139,8 @@ void KeyManager::ensureKeymask(const Client* client) {
 
     if (client == nullptr) {
         targetMaskStr = "";
-        HSDebug("KeyManager::ensureKeymask(): Nothing in focus, using empty mask\n");
     } else {
         targetMaskStr = client->keymask_();
-        HSDebug("KeyManager::ensureKeymask(): Assuming focused client: %s\n", client->window_id_str().c_str());
     }
 
     if (activeKeymask_.str != targetMaskStr) {
