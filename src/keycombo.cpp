@@ -28,9 +28,10 @@ const vector<KeyCombo::ModifierNameAndMask> KeyCombo::modifierMasks = {
 /*!
  * Provides the mask value for a given modifier name.
  *
- * If the modifier name is unknown, an empty mask (zero) is returned.
+ * \throws std::runtime_error if modifier name is unknown
  */
 unsigned int KeyCombo::getMaskForModifierName(string name) {
+    // Simple, linear search for matching list entry:
     for (auto& entry : modifierMasks) {
         if (entry.name == name) {
             return entry.mask;
@@ -38,7 +39,6 @@ unsigned int KeyCombo::getMaskForModifierName(string name) {
     }
 
     throw std::runtime_error("Unknown modifier name " + name);
-    // or return 0?
 }
 
 /*!
@@ -120,18 +120,7 @@ unsigned int KeyCombo::string2modifiers(const string& str) {
     unsigned int modifiers = 0;
     // all parts except last one are modifiers
     for (auto iter = splitted.begin(); iter + 1 != splitted.end(); iter++) {
-        unsigned int mask = 0;
-        // Linear search for matching list entry:
-        for (auto& entry : modifierMasks) {
-            if (entry.name == *iter) {
-                mask = entry.mask;
-                break;
-            }
-        }
-        if (mask == 0) {
-            throw std::runtime_error("Unknown modifier \"" + *iter + "\"");
-        }
-        modifiers |= mask;
+        modifiers |= getMaskForModifierName(*iter);
     }
     return modifiers;
 }
