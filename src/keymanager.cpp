@@ -112,7 +112,7 @@ void KeyManager::handleKeyPress(XEvent* ev) const {
 }
 
 void KeyManager::regrabAll() {
-    xKeyGrabber_.updateKeyboardMapping();
+    xKeyGrabber_.updateNumlockMask();
 
      // Remove all current grabs:
     xKeyGrabber_.ungrabAll();

@@ -18,9 +18,7 @@ public:
         updateNumlockMask();
     }
 
-    void updateKeyboardMapping() {
-        updateNumlockMask();
-    }
+    void updateNumlockMask();
 
     KeyCombo xEventToKeyCombo(XEvent *ev) const;
 
@@ -38,6 +36,5 @@ private:
     void changeGrabbedState(const KeyCombo& keyCombo, bool grabbed);
     unsigned int numlockMask_ = 0;
 
-    void updateNumlockMask();
 };
 
