@@ -9,6 +9,7 @@
 #include "globals.h"
 #include "ipc-protocol.h"
 #include "key.h"
+#include "keycombo.h"
 #include "root.h"
 #include "utils.h"
 

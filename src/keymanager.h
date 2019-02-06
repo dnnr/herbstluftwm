@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 
+#include "keycombo.h"
 #include "object.h"
 #include "types.h"
 #include "xkeygrabber.h"
