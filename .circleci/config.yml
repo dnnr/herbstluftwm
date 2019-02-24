@@ -77,7 +77,9 @@ commands:
                     - .tox
     iwyu:
         steps:
-            - run: ./iwyu.sh
+            - run:
+                name: "Run include-what-you-use"
+                command: ./iwyu.sh
 
 jobs:
     build-and-test-on-disco:
