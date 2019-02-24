@@ -11,10 +11,14 @@ steps_template: &steps_template
                 # Delete .git to maximize ccache effectiveness (no version string mismatches)
                 rm -rf .git
         - restore_cache:
+            name: "Restore ccache"
             keys:
                 - ccache-{{ checksum "CXX" }}-{{ .Branch }}-{{ .Revision }}
                 - ccache-{{ checksum "CXX" }}-{{ .Branch }}
                 - ccache-{{ checksum "CXX" }}-
+        - restore_cache:
+            name: "Restore tox cache"
+            keys:
                 - tox-{{ .Branch }}-{{ .Revision }}
                 - tox-{{ .Branch }}
                 - tox-
