@@ -1,4 +1,5 @@
 FROM ubuntu:disco-20190204
+
 RUN apt-get update && apt-get -y install \
     clang-7 \
     cmake \
