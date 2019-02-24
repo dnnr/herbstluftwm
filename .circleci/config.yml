@@ -25,7 +25,8 @@ steps_template: &steps_template
                 ccache -z
         - run:
             command: |
-                mkdir build && cd build
+                [[ -d build ]] || mkdir build
+                cd build
                 cmake -GNinja -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DENABLE_CCACHE=YES ..
                 ninja -v -k1 ${NINJA_ARGS} herbstclient herbstluftwm
                 ${RUN_TOX} && tox -- -n auto -x -k test_close
