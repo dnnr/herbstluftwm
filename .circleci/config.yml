@@ -1,5 +1,23 @@
 version: 2
 jobs:
+    build:
+        docker:
+            - image: dnnr/hlwm
+        steps:
+            - checkout
+            - restore_cache:
+                key: ccache-clang-7
+            - run:
+                command: |
+                    export CC=clang-7 CXX=clang++-7
+                    export CCACHE_DIR=.ccache
+                    cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_CCACHE=YES .
+                    make
+            - save_cache:
+                key: ccache-clang-7
+                paths:
+                    - .ccache
+
     iwyu:
         docker:
             - image: dnnr/hlwm
@@ -9,6 +27,9 @@ jobs:
 
 workflows:
     version: 2
-    iwyu:
+    ci_checks:
         jobs:
+            - build
             - iwyu
+            # - test
+            # - publish coverage
