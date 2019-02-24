@@ -3,11 +3,13 @@ version: 2
 steps_template: &steps_template
     steps:
         - checkout
-        - run: |
-            # Provide CXX in a file so that in can be included in the cache key:
-            echo ${CXX} > CXX
-            # Delete .git to maximize ccache effectiveness (no version string mismatches)
-            rm -rf .git
+        - run:
+            name: "Misc. preparations"
+            command: |
+                # Provide CXX in a file so that in can be included in the cache key:
+                echo ${CXX} > CXX
+                # Delete .git to maximize ccache effectiveness (no version string mismatches)
+                rm -rf .git
         - restore_cache:
             keys:
                 - ccache-{{ checksum "CXX" }}-{{ .Branch }}-{{ .Revision }}
