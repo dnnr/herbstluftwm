@@ -33,7 +33,7 @@ steps_template: &steps_template
                 cd build
                 cmake -GNinja -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DENABLE_CCACHE=YES ..
                 ninja -v -k1 ${NINJA_ARGS} herbstclient herbstluftwm
-                ${RUN_TOX} && tox -e py37 -- -n auto -x -k test_close
+                ${RUN_TOX} && tox -e py37 -- -n auto -v -x -k test_close
         - run:
             when: always
             name: "Print ccache stats (after)"
