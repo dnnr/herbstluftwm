@@ -96,15 +96,14 @@ jobs:
         executor: disco
         docker:
             - image: dnnr/hlwm-ci:disco
-        environment:
-            NINJA_ARGS: -j1
-            RUN_TOX: false
         steps:
             - checkout
             - build:
                 cc: gcc-8
                 cxx: g++-8
                 build_type: "Debug"
+                # GCC-8 consumes too much RAM to run in parallel:
+                ninja_args: -j2
 
     build-trusty-gcc-4:
         executor: trusty
