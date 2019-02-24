@@ -6,3 +6,8 @@ jobs:
               steps:
                   - checkout
                   - run: ./iwyu.sh
+
+workflows:
+    version: 2
+    iwyu:
+        - iwyu
