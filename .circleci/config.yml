@@ -31,6 +31,6 @@ workflows:
     ci_checks:
         jobs:
             - build
-            - iwyu
+            # - iwyu
             # - test
             # - publish coverage
