@@ -12,6 +12,12 @@ jobs:
                     - ccache-clang-7-{{ .Revision }}
                     - ccache-clang-7-
             - run:
+                when: always
+                name: "ccache stats (before)"
+                command: |
+                    ccache -s
+                    ccache -z
+            - run:
                 command: |
                     ccache -z
                     export CC=clang-7 CXX=clang++-7
@@ -19,6 +25,7 @@ jobs:
                     ninja -v -k10 herbstclient
             - run:
                 when: always
+                name: "ccache stats (after)"
                 command: ccache -s
             - save_cache:
                 when: always
