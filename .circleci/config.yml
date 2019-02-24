@@ -103,7 +103,7 @@ workflows:
         jobs:
             - build-disco-clang-7
             # - build-disco-gcc-8
-            # - build-trusty-gcc-4.8
+            - build-trusty-gcc-4.8
             # - iwyu
             # - test
             # - publish coverage
