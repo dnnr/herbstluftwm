@@ -1,39 +1,42 @@
 version: 2
+
+steps_template: &steps_template
+    - checkout
+    environment:
+        # Reasonable limit to fit a full build (but not much more):
+        CCACHE_MAXFILES=200
+        CC=clang-7
+        CXX=clang++-7
+    - restore_cache:
+        keys:
+            - ccache-clang-7-{{ .Branch }}-{{ .Revision }}
+            - ccache-clang-7-{{ .Branch }}
+            - ccache-clang-7-
+    - run:
+        when: always
+        name: "ccache stats (before)"
+        command: |
+            ccache -s
+            ccache -z
+    - run:
+        command: |
+            cmake -GNinja -DCMAKE_BUILD_TYPE=Debug -DENABLE_CCACHE=YES .
+            ninja -v -k10 herbstclient herbstluftwm
+    - run:
+        when: always
+        name: "ccache stats (after)"
+        command: ccache -s
+    - save_cache:
+        when: always
+        key: ccache-clang-7-{{ .Branch }}-{{ .Revision }}
+        paths:
+            - ~/.ccache
+
 jobs:
     build:
         docker:
             - image: dnnr/hlwm
-        steps:
-            - checkout
-            environment:
-                # Reasonable limit to fit a full build (but not much more):
-                CCACHE_MAXFILES=200
-                CC=clang-7
-                CXX=clang++-7
-            - restore_cache:
-                keys:
-                    - ccache-clang-7-{{ .Branch }}-{{ .Revision }}
-                    - ccache-clang-7-{{ .Branch }}
-                    - ccache-clang-7-
-            - run:
-                when: always
-                name: "ccache stats (before)"
-                command: |
-                    ccache -s
-                    ccache -z
-            - run:
-                command: |
-                    cmake -GNinja -DCMAKE_BUILD_TYPE=Debug -DENABLE_CCACHE=YES .
-                    ninja -v -k10 herbstclient herbstluftwm
-            - run:
-                when: always
-                name: "ccache stats (after)"
-                command: ccache -s
-            - save_cache:
-                when: always
-                key: ccache-clang-7-{{ .Branch }}-{{ .Revision }}
-                paths:
-                    - ~/.ccache
+        <<: *steps_template
 
     iwyu:
         docker:
