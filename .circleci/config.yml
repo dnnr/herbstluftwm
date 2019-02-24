@@ -56,7 +56,7 @@ steps_template: &steps_template
             when: on_success
             key: tox-{{ .Branch }}-{{ .Revision }}
             paths:
-                - build/.tox
+                - .tox
 
 jobs:
     build-disco-clang-7:
