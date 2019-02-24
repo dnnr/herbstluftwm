@@ -14,6 +14,7 @@ jobs:
                     cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_CCACHE=YES .
                     make herbstclient
             - save_cache:
+                when: always
                 key: ccache-clang-7
                 paths:
                     - .ccache
