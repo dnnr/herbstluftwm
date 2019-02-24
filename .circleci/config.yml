@@ -38,7 +38,7 @@ steps_template: &steps_template
                 - ~/.ccache
 
 jobs:
-    build-clang-7:
+    build-disco-clang-7:
         docker:
             - image: dnnr/hlwm-ci:disco
         environment:
@@ -46,7 +46,7 @@ jobs:
             CXX: clang++-7
         <<: *steps_template
 
-    build-gcc-8:
+    build-disco-gcc-8:
         docker:
             - image: dnnr/hlwm-ci:disco
         environment:
@@ -66,8 +66,8 @@ workflows:
     version: 2
     ci_checks:
         jobs:
-            - build-clang-7
-            - build-gcc-8
+            - build-disco-clang-7
+            - build-disco-gcc-8
             # - iwyu
             # - test
             # - publish coverage
