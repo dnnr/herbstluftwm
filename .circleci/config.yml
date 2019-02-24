@@ -44,7 +44,7 @@ jobs:
             - image: dnnr/hlwm
         environment:
             CC: gcc-8
-            CXX: gcc++-8
+            CXX: g++-8
         <<: *steps_template
 
     iwyu:
