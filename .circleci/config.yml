@@ -74,11 +74,14 @@ jobs:
         docker:
             - image: dnnr/hlwm-ci:disco
         environment:
-            CC: clang-7
-            CXX: clang++-7
             BUILD_TYPE: Debug
             RUN_TOX: true
-        <<: *steps_template
+        steps:
+            - checkout
+            - build:
+                cc: clang-7
+                cxx: clang++-7
+        # <<: *steps_template
 
     build-disco-gcc-8:
         docker:
