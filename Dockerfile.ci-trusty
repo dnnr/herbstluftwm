@@ -23,3 +23,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
 #    docbook-xml \
 #    docbook-xsl \
 #    xsltproc
+
+# Clean up:
+RUN rm -rf /var/lib/apt/lists/*
