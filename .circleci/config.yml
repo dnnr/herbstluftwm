@@ -34,9 +34,9 @@ jobs:
             - image: dnnr/hlwm
         environment:
             # Reasonable limit to fit a full build (but not much more):
-            CCACHE_MAXFILES=200
-            CC=clang-7
-            CXX=clang++-7
+            CCACHE_MAXFILES: 200
+            CC: clang-7
+            CXX: clang++-7
         <<: *steps_template
 
     iwyu:
