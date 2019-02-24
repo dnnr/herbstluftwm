@@ -24,7 +24,7 @@ jobs:
                 when: always
                 key: ccache-clang-7-{{ .Revision }}
                 paths:
-                    - .ccache
+                    - ~/.ccache
 
     iwyu:
         docker:
