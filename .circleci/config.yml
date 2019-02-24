@@ -70,7 +70,7 @@ steps_template: &steps_template
                 - .tox
 
 jobs:
-    build_disco_clang_7:
+    build-disco-clang-7:
         docker:
             - image: dnnr/hlwm-ci:disco
         environment:
@@ -80,7 +80,7 @@ jobs:
             RUN_TOX: true
         <<: *steps_template
 
-    build_disco_gcc_8:
+    build-disco-gcc-8:
         docker:
             - image: dnnr/hlwm-ci:disco
         environment:
@@ -91,7 +91,7 @@ jobs:
             RUN_TOX: false
         <<: *steps_template
 
-    build_trusty_gcc_4.8:
+    build-trusty-gcc-4:
         docker:
             - image: dnnr/hlwm-ci:trusty
         environment:
@@ -112,9 +112,9 @@ workflows:
     version: 2
     ci_checks:
         jobs:
-            - build_disco_clang_7
-            # - build_disco_gcc_8
-            # - build_trusty_gcc_4.8
+            - build-disco-clang-7
+            # - build-disco-gcc-8
+            # - build-trusty-gcc-4
             # - iwyu
             # - test
             # - publish coverage
