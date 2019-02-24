@@ -10,6 +10,7 @@ jobs:
                     - ccache-clang-7-{{ .Branch }}-{{ .Revision }}
                     - ccache-clang-7-{{ .Branch }}
                     - ccache-clang-7-
+            - run: find ~/.ccache
             - run:
                 when: always
                 name: "ccache stats (before)"
@@ -31,6 +32,7 @@ jobs:
                 key: ccache-clang-7-{{ .Branch }}-{{ .Revision }}
                 paths:
                     - ~/.ccache
+            - run: find ~/.ccache
 
     iwyu:
         docker:
