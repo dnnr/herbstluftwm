@@ -11,6 +11,7 @@ commands:
                 type: string
             ninja_args:
                 type: string
+                default: ""
         steps:
             - run:
                 name: "Misc. preparations"
