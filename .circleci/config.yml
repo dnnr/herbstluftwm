@@ -25,7 +25,7 @@ steps_template: &steps_template
                 ccache -z
         - run:
             command: |
-                cmake -GNinja -DCMAKE_BUILD_TYPE=Debug -DENABLE_CCACHE=YES .
+                cmake -GNinja -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DENABLE_CCACHE=YES .
                 ninja -v -k1 ${NINJA_ARGS} herbstclient herbstluftwm
         - run:
             when: always
@@ -44,6 +44,7 @@ jobs:
         environment:
             CC: clang-7
             CXX: clang++-7
+            BUILD_TYPE: Debug
         <<: *steps_template
 
     build-disco-gcc-8:
@@ -52,6 +53,7 @@ jobs:
         environment:
             CC: gcc-8
             CXX: g++-8
+            BUILD_TYPE: Debug
             NINJA_ARGS: -j1
         <<: *steps_template
 
@@ -61,6 +63,7 @@ jobs:
         environment:
             CC: gcc-4.8
             CXX: g++-4.8
+            BUILD_TYPE: Release
         <<: *steps_template
 
     iwyu:
