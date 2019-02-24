@@ -31,12 +31,20 @@ steps_template: &steps_template
                 - ~/.ccache
 
 jobs:
-    build:
+    build-clang-7:
         docker:
             - image: dnnr/hlwm
         environment:
             CC: clang-7
             CXX: clang++-7
+        <<: *steps_template
+
+    build-gcc-8:
+        docker:
+            - image: dnnr/hlwm
+        environment:
+            CC: gcc-8
+            CXX: gcc++-8
         <<: *steps_template
 
     iwyu:
@@ -50,7 +58,8 @@ workflows:
     version: 2
     ci_checks:
         jobs:
-            - build
+            - build-clang-7
+            - build-gcc-8
             # - iwyu
             # - test
             # - publish coverage
