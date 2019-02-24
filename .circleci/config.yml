@@ -108,6 +108,7 @@ jobs:
             - test:
                 builddir: build-clang-7
             - iwyu
+              # TODO: publish coverage
 
     build-on-trusty:
         executor: trusty
@@ -123,9 +124,4 @@ workflows:
     ci_checks:
         jobs:
             - build-and-test-on-disco
-            # - build-disco-clang-7
-            # - build-disco-gcc-8
             - build-on-trusty
-            # - iwyu
-            # - test
-            # - publish coverage
