@@ -55,7 +55,6 @@ commands:
                 key: ccache-<< parameters.cxx >>-{{ .Branch }}-{{ .Revision }}
                 paths:
                     - ~/.ccache
-            - persist_to_workspace:
     test:
         parameters:
             builddir:
