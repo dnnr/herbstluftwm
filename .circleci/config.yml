@@ -40,7 +40,7 @@ steps_template: &steps_template
 jobs:
     build-clang-7:
         docker:
-            - image: dnnr/hlwm
+            - image: dnnr/hlwm-ci:disco
         environment:
             CC: clang-7
             CXX: clang++-7
@@ -48,7 +48,7 @@ jobs:
 
     build-gcc-8:
         docker:
-            - image: dnnr/hlwm
+            - image: dnnr/hlwm-ci:disco
         environment:
             CC: gcc-8
             CXX: g++-8
@@ -57,7 +57,7 @@ jobs:
 
     iwyu:
         docker:
-            - image: dnnr/hlwm
+            - image: dnnr/hlwm-ci:disco
         steps:
             - checkout
             - run: ./iwyu.sh
