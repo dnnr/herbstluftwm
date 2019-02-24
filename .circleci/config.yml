@@ -3,12 +3,12 @@ version: 2
 steps_template: &steps_template
     steps:
         - checkout
-        - run: echo ${CXX} > env.CXX
+        - run: echo ${CXX} > CXX
         - restore_cache:
             keys:
-                - ccache-{{ checksum env.CXX }}-{{ .Branch }}-{{ .Revision }}
-                - ccache-{{ checksum env.CXX }}-{{ .Branch }}
-                - ccache-{{ checksum env.CXX }}-
+                - ccache-{{ checksum "CXX" }}-{{ .Branch }}-{{ .Revision }}
+                - ccache-{{ checksum "CXX" }}-{{ .Branch }}
+                - ccache-{{ checksum "CXX" }}-
         - run:
             when: always
             name: "ccache stats (before)"
@@ -27,7 +27,7 @@ steps_template: &steps_template
             command: ccache -s
         - save_cache:
             when: always
-            key: ccache-{{ checksum env.CXX }}-{{ .Branch }}-{{ .Revision }}
+            key: ccache-{{ checksum "CXX" }}-{{ .Branch }}-{{ .Revision }}
             paths:
                 - ~/.ccache
 
