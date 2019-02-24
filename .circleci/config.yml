@@ -5,7 +5,7 @@ steps_template: &steps_template
         - checkout
         - restore_cache:
             keys:
-                - ccache-clang-7-{{ .Branch }}-{{ .Revision }}
+                - ccache-clang-7-{{ .Branch }}-{{ .Revision }}-{{ .Environment.CXX }}
                 - ccache-clang-7-{{ .Branch }}
                 - ccache-clang-7-
         - run:
@@ -24,7 +24,7 @@ steps_template: &steps_template
             command: ccache -s
         - save_cache:
             when: always
-            key: ccache-clang-7-{{ .Branch }}-{{ .Revision }}
+            key: ccache-clang-7-{{ .Branch }}-{{ .Revision }}-{{ .Environment.CXX }}
             paths:
                 - ~/.ccache
 
