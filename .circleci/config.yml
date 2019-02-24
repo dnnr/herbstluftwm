@@ -55,7 +55,7 @@ jobs:
             NINJA_ARGS: -j1
         <<: *steps_template
 
-        build-trusty-gcc-4.8:
+    build-trusty-gcc-4.8:
         docker:
             - image: dnnr/hlwm-ci:trusty
         environment:
