@@ -3,7 +3,11 @@ version: 2
 steps_template: &steps_template
     steps:
         - checkout
-        - run: echo ${CXX} > CXX
+        - run: |
+            # Provide CXX in a file so that in can be included in the cache key:
+            echo ${CXX} > CXX
+            # Delete .git to maximize ccache effectiveness (no version string mismatches)
+            rm -rf .git
         - restore_cache:
             keys:
                 - ccache-{{ checksum "CXX" }}-{{ .Branch }}-{{ .Revision }}
@@ -11,7 +15,7 @@ steps_template: &steps_template
                 - ccache-{{ checksum "CXX" }}-
         - run:
             when: always
-            name: "ccache stats (before)"
+            name: "Print ccache stats (before)"
             command: |
                 # Reasonable limit to fit a full build (but not much more):
                 ccache --max-files=200
@@ -23,7 +27,7 @@ steps_template: &steps_template
                 ninja -v -k10 herbstclient herbstluftwm
         - run:
             when: always
-            name: "ccache stats (after)"
+            name: "Print ccache stats (after)"
             command: ccache -s
         - save_cache:
             when: always
