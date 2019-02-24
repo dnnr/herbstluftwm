@@ -7,11 +7,12 @@ jobs:
             - checkout
             - restore_cache:
                 key: ccache-clang-7
+            - environment:
+                CCACHE_DIR: ~/.ccache
             - run:
                 command: |
                     ccache -z
                     export CC=clang-7 CXX=clang++-7
-                    export CCACHE_DIR=.ccache
                     cmake -GNinja -DCMAKE_BUILD_TYPE=Debug -DENABLE_CCACHE=YES .
                     ninja -v -k10 herbstclient
             - run:
