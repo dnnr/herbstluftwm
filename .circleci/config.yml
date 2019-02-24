@@ -56,6 +56,9 @@ commands:
                 paths:
                     - ~/.ccache
     test:
+        parameters:
+            builddir:
+                type: string
         steps:
             - restore_cache:
                 name: "Restore tox cache"
@@ -66,7 +69,7 @@ commands:
             - run:
                 name: "Run tests"
                 command: |
-                    cd build
+                    cd << parameters.builddir >>
                     ${RUN_TOX} && tox -e py37 -- -n auto -v -x --junitxml=test-results/tox/results.xml -k test_close
             - store_test_results:
                 path: test-results
@@ -103,6 +106,7 @@ jobs:
                 cxx: clang++-7
                 build_type: "Debug"
             - test
+                builddir: build-clang-7
             - iwyu
 
     build-on-trusty:
