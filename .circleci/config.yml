@@ -107,7 +107,7 @@ jobs:
                 cc: clang-7
                 cxx: clang++-7
                 build_type: "Debug"
-            - test
+            - test:
                 builddir: build-clang-7
             - iwyu
 
