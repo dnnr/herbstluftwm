@@ -22,7 +22,7 @@ commands:
                 default: ""
         steps:
             - restore_cache:
-                name: "Restore ccache"
+                name: "Restore ccache for << parameters.cc >>"
                 keys:
                     - ccache-<< parameters.cxx >>-{{ .Branch }}-{{ .Revision }}
                     - ccache-<< parameters.cxx >>-{{ .Branch }}
@@ -36,7 +36,7 @@ commands:
                     ccache -s
                     ccache -z
             - run:
-                name: "Build"
+                name: "Build with << parameters.cc >>"
                 command: |
                     [[ -d build ]] || mkdir build
                     cd build
@@ -49,7 +49,7 @@ commands:
                 name: "Print ccache stats (after)"
                 command: ccache -s
             - save_cache:
-                name: "Save ccache"
+                name: "Save ccache for << parameters.cc >>"
                 when: always
                 key: ccache-<< parameters.cxx >>-{{ .Branch }}-{{ .Revision }}
                 paths:
