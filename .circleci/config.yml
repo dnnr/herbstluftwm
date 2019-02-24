@@ -1,5 +1,13 @@
 version: 2.1
 
+executors:
+    disco:
+        docker:
+            - image: dnnr/hlwm-ci:disco
+    trusty:
+        docker:
+            - image: dnnr/hlwm-ci:trusty
+
 commands:
     build:
         parameters:
@@ -75,8 +83,7 @@ commands:
 
 jobs:
     build-disco-clang-7:
-        docker:
-            - image: dnnr/hlwm-ci:disco
+        executor: disco
         steps:
             - checkout
             - build:
@@ -86,6 +93,7 @@ jobs:
             - test
 
     build-disco-gcc-8:
+        executor: disco
         docker:
             - image: dnnr/hlwm-ci:disco
         environment:
@@ -99,6 +107,7 @@ jobs:
                 build_type: "Debug"
 
     build-trusty-gcc-4:
+        executor: trusty
         docker:
             - image: dnnr/hlwm-ci:trusty
         steps:
