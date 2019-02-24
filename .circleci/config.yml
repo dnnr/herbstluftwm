@@ -21,11 +21,6 @@ commands:
                 type: string
                 default: ""
         steps:
-            - run:
-                name: "Misc. preparations"
-                command: |
-                    # Delete .git/ to maximize ccache effectiveness (no version string mismatches)
-                    rm -rf .git
             - restore_cache:
                 name: "Restore ccache"
                 keys:
@@ -86,6 +81,11 @@ jobs:
         executor: disco
         steps:
             - checkout
+            - run:
+                name: "Misc. preparations"
+                command: |
+                    # Delete .git/ to maximize ccache effectiveness (no version string mismatches)
+                    rm -rf .git
             - build:
                 cc: gcc-8
                 cxx: g++-8
