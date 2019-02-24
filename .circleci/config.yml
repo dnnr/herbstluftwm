@@ -19,8 +19,8 @@ steps_template: &steps_template
             when: always
             name: "Print ccache stats (before)"
             command: |
-                # Reasonable limit to fit a full build (but not much more):
-                ccache --max-files=200
+                # Set reasonable ccache limits:
+                ccache --max-files=0 --max-size=500M
                 ccache -s
                 ccache -z
         - run:
