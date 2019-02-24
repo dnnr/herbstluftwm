@@ -3,14 +3,14 @@ jobs:
     build:
         docker:
             - image: dnnr/hlwm
+        environment:
+            CCACHE_DIR: ~/.ccache
         steps:
             - checkout
             - restore_cache:
                 keys:
                     - ccache-clang-7-{{ .Revision }}
                     - ccache-clang-7-
-            - environment:
-                CCACHE_DIR: ~/.ccache
             - run:
                 command: |
                     ccache -z
