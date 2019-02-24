@@ -70,7 +70,7 @@ commands:
                 name: "Run tests"
                 command: |
                     cd << parameters.builddir >>
-                    ${RUN_TOX} && tox -e py37 -- -n auto -v -x --junitxml=test-results/tox/results.xml -k test_close
+                    ${RUN_TOX} && tox -e py37 -- -n auto -v -x --junitxml=test-results/tox/results.xml
             - store_test_results:
                 path: test-results
             - save_cache:
