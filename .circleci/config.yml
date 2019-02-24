@@ -38,8 +38,9 @@ commands:
             - run:
                 name: "Build with << parameters.cc >>"
                 command: |
-                    [[ -d build ]] || mkdir build
-                    cd build
+                    builddir=build-<< parameters.cc >>
+                    [[ -d $builddir ]] || mkdir $builddir
+                    cd $builddir
                     export CC=<< parameters.cc >>
                     export CXX=<< parameters.cxx >>
                     cmake -GNinja -DCMAKE_BUILD_TYPE=<< parameters.build_type >> -DENABLE_CCACHE=YES ..
