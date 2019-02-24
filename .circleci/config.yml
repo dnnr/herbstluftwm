@@ -88,10 +88,9 @@ commands:
 jobs:
     build-and-test-on-disco:
         executor: disco
-        parallelism: 2
         steps:
             - checkout
-            - deploy:
+            - run:
                 name: "Misc. preparations"
                 command: |
                     # Delete .git/ to maximize ccache effectiveness (no version string mismatches)
@@ -126,7 +125,7 @@ workflows:
             - build-and-test-on-disco
             # - build-disco-clang-7
             # - build-disco-gcc-8
-            # - build-on-trusty
+            - build-on-trusty
             # - iwyu
             # - test
             # - publish coverage
