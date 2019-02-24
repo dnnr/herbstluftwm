@@ -36,7 +36,8 @@ jobs:
             CCACHE_MAXFILES=200
             CC=clang-7
             CXX=clang++-7
-        <<: *steps_template
+        steps:
+            <<: *steps_template
 
     iwyu:
         docker:
