@@ -75,6 +75,9 @@ commands:
                 key: tox-{{ .Branch }}-{{ .Revision }}
                 paths:
                     - .tox
+    iwyu:
+        steps:
+            - run: ./iwyu.sh
 
 jobs:
     build-disco-both:
@@ -97,6 +100,7 @@ jobs:
                 cxx: clang++-7
                 build_type: "Debug"
             - test
+            - iwyu
 
     build-disco-clang-7:
         executor: disco
@@ -127,12 +131,6 @@ jobs:
                 cc: gcc-4.8
                 cxx: g++-4.8
                 build_type: "Release"
-
-    iwyu:
-        executor: disco
-        steps:
-            - checkout
-            - run: ./iwyu.sh
 
 workflows:
     version: 2
