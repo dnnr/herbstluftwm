@@ -17,7 +17,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
     pkg-config \
     tox \
     xdotool \
-    xterm
+    xterm \
+    xvfb
 
 # Doc deps (disabled for now because they're huge)
 #RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
