@@ -1,9 +1,6 @@
 version: 2
 
 steps_template: &steps_template
-    environment:
-        # Reasonable limit to fit a full build (but not much more):
-        CCACHE_MAXFILES: 200
     steps:
         - checkout
         - restore_cache:
@@ -15,6 +12,8 @@ steps_template: &steps_template
             when: always
             name: "ccache stats (before)"
             command: |
+                # Reasonable limit to fit a full build (but not much more):
+                ccache --max-files=200
                 ccache -s
                 ccache -z
         - run:
