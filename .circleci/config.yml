@@ -8,6 +8,8 @@ jobs:
             environment:
                 # Reasonable limit to fit a full build (but not much more):
                 CCACHE_MAXFILES=200
+                CC=clang-7
+                CXX=clang++-7
             - restore_cache:
                 keys:
                     - ccache-clang-7-{{ .Branch }}-{{ .Revision }}
@@ -21,7 +23,6 @@ jobs:
                     ccache -z
             - run:
                 command: |
-                    export CC=clang-7 CXX=clang++-7
                     cmake -GNinja -DCMAKE_BUILD_TYPE=Debug -DENABLE_CCACHE=YES .
                     ninja -v -k10 herbstclient herbstluftwm
             - run:
