@@ -25,8 +25,10 @@ steps_template: &steps_template
                 ccache -z
         - run:
             command: |
-                cmake -GNinja -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DENABLE_CCACHE=YES .
+                mkdir build && cd build
+                cmake -GNinja -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DENABLE_CCACHE=YES ..
                 ninja -v -k1 ${NINJA_ARGS} herbstclient herbstluftwm
+                ${RUN_TOX} && tox -- -n auto -x -k test_close
         - run:
             when: always
             name: "Print ccache stats (after)"
@@ -45,6 +47,7 @@ jobs:
             CC: clang-7
             CXX: clang++-7
             BUILD_TYPE: Debug
+            RUN_TOX: true
         <<: *steps_template
 
     build-disco-gcc-8:
@@ -55,6 +58,7 @@ jobs:
             CXX: g++-8
             BUILD_TYPE: Debug
             NINJA_ARGS: -j1
+            RUN_TOX: false
         <<: *steps_template
 
     build-trusty-gcc-4.8:
@@ -64,6 +68,7 @@ jobs:
             CC: gcc-4.8
             CXX: g++-4.8
             BUILD_TYPE: Release
+            RUN_TOX: false
         <<: *steps_template
 
     iwyu:
@@ -77,9 +82,9 @@ workflows:
     version: 2
     ci_checks:
         jobs:
-            # - build-disco-clang-7
+            - build-disco-clang-7
             # - build-disco-gcc-8
-            - build-trusty-gcc-4.8
+            # - build-trusty-gcc-4.8
             # - iwyu
             # - test
             # - publish coverage
