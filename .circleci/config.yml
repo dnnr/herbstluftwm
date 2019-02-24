@@ -15,6 +15,9 @@ steps_template: &steps_template
                 - ccache-{{ checksum "CXX" }}-{{ .Branch }}-{{ .Revision }}
                 - ccache-{{ checksum "CXX" }}-{{ .Branch }}
                 - ccache-{{ checksum "CXX" }}-
+                - tox-{{ .Branch }}-{{ .Revision }}
+                - tox-{{ .Branch }}
+                - tox-
         - run:
             when: always
             name: "Print ccache stats (before)"
@@ -35,10 +38,17 @@ steps_template: &steps_template
             name: "Print ccache stats (after)"
             command: ccache -s
         - save_cache:
+            name: "Save ccache"
             when: always
             key: ccache-{{ checksum "CXX" }}-{{ .Branch }}-{{ .Revision }}
             paths:
                 - ~/.ccache
+        - save_cache:
+            name: "Save tox cache"
+            when: on_success
+            key: tox-{{ .Branch }}-{{ .Revision }}
+            paths:
+                - build/.tox
 
 jobs:
     build-disco-clang-7:
