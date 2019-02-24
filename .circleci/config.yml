@@ -7,6 +7,10 @@ commands:
                 type: string
             cxx:
                 type: string
+            build_type:
+                type: string
+            ninja_args:
+                type: string
         steps:
             - run:
                 name: "Misc. preparations"
@@ -28,15 +32,14 @@ commands:
                     ccache -s
                     ccache -z
             - run:
-                name: "Build and test"
+                name: "Build"
                 command: |
                     [[ -d build ]] || mkdir build
                     cd build
                     export CC=<< parameters.cc >>
                     export CXX=<< parameters.cxx >>
-                    cmake -GNinja -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DENABLE_CCACHE=YES ..
-                    ninja -v -k1 ${NINJA_ARGS} herbstclient herbstluftwm
-                    #${RUN_TOX} && tox -e py37 -- -n auto -v -x --junitxml=test-results/tox/results.xml -k test_close
+                    cmake -GNinja -DCMAKE_BUILD_TYPE=<< parameters.build_type >> -DENABLE_CCACHE=YES ..
+                    ninja -v -k1 << parameters.ninja_args >> herbstclient herbstluftwm
             - run:
                 when: always
                 name: "Print ccache stats (after)"
@@ -47,62 +50,62 @@ commands:
                 key: ccache-<< parameters.cxx >>-{{ .Branch }}-{{ .Revision }}
                 paths:
                     - ~/.ccache
-
-steps_template: &steps_template
-    steps:
-        - checkout
-        - build:
-            cc: "$CC"
-            cxx: "$CXX"
-        - restore_cache:
-            name: "Restore tox cache"
-            keys:
-                - tox-{{ .Branch }}-{{ .Revision }}
-                - tox-{{ .Branch }}
-                - tox-
-        - store_test_results:
-            path: test-results
-        - save_cache:
-            name: "Save tox cache"
-            when: on_success
-            key: tox-{{ .Branch }}-{{ .Revision }}
-            paths:
-                - .tox
+    test:
+        steps:
+            - restore_cache:
+                name: "Restore tox cache"
+                keys:
+                    - tox-{{ .Branch }}-{{ .Revision }}
+                    - tox-{{ .Branch }}
+                    - tox-
+            - run:
+                name: "Run tests"
+                command: |
+                    cd build
+                    ${RUN_TOX} && tox -e py37 -- -n auto -v -x --junitxml=test-results/tox/results.xml -k test_close
+            - store_test_results:
+                path: test-results
+            - save_cache:
+                name: "Save tox cache"
+                when: on_success
+                key: tox-{{ .Branch }}-{{ .Revision }}
+                paths:
+                    - .tox
 
 jobs:
     build-disco-clang-7:
         docker:
             - image: dnnr/hlwm-ci:disco
-        environment:
-            BUILD_TYPE: Debug
-            RUN_TOX: true
         steps:
             - checkout
             - build:
                 cc: clang-7
                 cxx: clang++-7
-        # <<: *steps_template
+                build_type: "Debug"
+            - test
 
     build-disco-gcc-8:
         docker:
             - image: dnnr/hlwm-ci:disco
         environment:
-            CC: gcc-8
-            CXX: g++-8
-            BUILD_TYPE: Debug
             NINJA_ARGS: -j1
             RUN_TOX: false
-        <<: *steps_template
+        steps:
+            - checkout
+            - build:
+                cc: gcc-7
+                cxx: g++-7
+                build_type: "Debug"
 
     build-trusty-gcc-4:
         docker:
             - image: dnnr/hlwm-ci:trusty
-        environment:
-            CC: gcc-4.8
-            CXX: g++-4.8
-            BUILD_TYPE: Release
-            RUN_TOX: false
-        <<: *steps_template
+        steps:
+            - checkout
+            - build:
+                cc: gcc-4.8
+                cxx: g++-4.8
+                build_type: "Release"
 
     iwyu:
         docker:
