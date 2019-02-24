@@ -82,6 +82,22 @@ commands:
                     - .tox
 
 jobs:
+    build-disco-both:
+        executor: disco
+        steps:
+            - checkout
+            - build:
+                cc: gcc-8
+                cxx: g++-8
+                build_type: "Debug"
+                # GCC-8 consumes too much RAM to run in parallel:
+                ninja_args: -j2
+            - build:
+                cc: clang-7
+                cxx: clang++-7
+                build_type: "Debug"
+            - test
+
     build-disco-clang-7:
         executor: disco
         steps:
@@ -122,8 +138,9 @@ workflows:
     version: 2
     ci_checks:
         jobs:
-            - build-disco-clang-7
-            - build-disco-gcc-8
+            - build-disco-both
+            # - build-disco-clang-7
+            # - build-disco-gcc-8
             - build-trusty-gcc-4
             # - iwyu
             # - test
