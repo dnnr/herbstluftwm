@@ -9,10 +9,14 @@ jobs:
                 key: ccache-clang-7
             - run:
                 command: |
+                    ccache -z
                     export CC=clang-7 CXX=clang++-7
                     export CCACHE_DIR=.ccache
                     cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_CCACHE=YES .
                     make herbstclient
+            - run:
+                when: always
+                command: ccache -s
             - save_cache:
                 when: always
                 key: ccache-clang-7
