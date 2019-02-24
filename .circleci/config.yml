@@ -24,7 +24,7 @@ steps_template: &steps_template
         - run:
             command: |
                 cmake -GNinja -DCMAKE_BUILD_TYPE=Debug -DENABLE_CCACHE=YES .
-                ninja -v -k10 herbstclient herbstluftwm
+                ninja -v -k1 herbstclient herbstluftwm
         - run:
             when: always
             name: "Print ccache stats (after)"
