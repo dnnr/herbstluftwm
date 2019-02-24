@@ -12,7 +12,7 @@ jobs:
                     export CC=clang-7 CXX=clang++-7
                     export CCACHE_DIR=.ccache
                     cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_CCACHE=YES .
-                    make
+                    make herbstclient
             - save_cache:
                 key: ccache-clang-7
                 paths:
