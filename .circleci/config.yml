@@ -55,6 +55,14 @@ jobs:
             NINJA_ARGS: -j1
         <<: *steps_template
 
+        build-trusty-gcc-4.8:
+        docker:
+            - image: dnnr/hlwm-ci:trusty
+        environment:
+            CC: gcc-4.8
+            CXX: g++-4.8
+        <<: *steps_template
+
     iwyu:
         docker:
             - image: dnnr/hlwm-ci:disco
@@ -68,6 +76,7 @@ workflows:
         jobs:
             - build-disco-clang-7
             - build-disco-gcc-8
+            - build-trusty-gcc-4.8
             # - iwyu
             # - test
             # - publish coverage
