@@ -5,6 +5,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
     ccache \
     clang-7 \
     cmake \
+    gcc-8 \
     git \
     iwyu \
     libglib2.0-dev \
@@ -13,7 +14,10 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
     libxinerama-dev \
     libxml2-utils \
     ninja-build \
-    pkg-config
+    pkg-config \
+    tox \
+    xdotool \
+    xterm
 
 # Doc deps (disabled for now because they're huge)
 #RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
