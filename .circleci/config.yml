@@ -10,4 +10,5 @@ jobs:
 workflows:
     version: 2
     iwyu:
-        - iwyu
+        jobs:
+            - iwyu
