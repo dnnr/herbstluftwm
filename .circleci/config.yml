@@ -1,0 +1,8 @@
+version: 2
+jobs:
+    iwyu:
+        docker:
+            - image: dnnr/hlwm
+              steps:
+                  - checkout
+                  - run: ./iwyu.sh
