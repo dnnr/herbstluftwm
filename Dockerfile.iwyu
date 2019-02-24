@@ -1,12 +1,18 @@
 FROM ubuntu:disco-20190204
 
 RUN apt-get update && apt-get -y install \
+    asciidoc \
+    ccache \
     clang-7 \
     cmake \
+    docbook-xml \
+    docbook-xsl \
     git \
     iwyu \
     libglib2.0-dev \
     libx11-dev \
     libxext-dev \
     libxinerama-dev \
+    libxml2-utils \
     pkg-config \
+    xsltproc
