@@ -6,9 +6,9 @@ steps_template: &steps_template
         - run:
             name: "Misc. preparations"
             command: |
-                # Provide CXX in a file so that in can be included in the cache key:
+                # Provide $CXX in a file so that in can be included in the cache key:
                 echo ${CXX} > CXX
-                # Delete .git to maximize ccache effectiveness (no version string mismatches)
+                # Delete .git/ to maximize ccache effectiveness (no version string mismatches)
                 rm -rf .git
         - restore_cache:
             name: "Restore ccache"
