@@ -13,7 +13,7 @@ jobs:
                     export CC=clang-7 CXX=clang++-7
                     export CCACHE_DIR=.ccache
                     cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_CCACHE=YES .
-                    make herbstclient
+                    ninja -v -k10 herbstclient
             - run:
                 when: always
                 command: ccache -s
