@@ -12,7 +12,7 @@ jobs:
                     ccache -z
                     export CC=clang-7 CXX=clang++-7
                     export CCACHE_DIR=.ccache
-                    cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_CCACHE=YES .
+                    cmake -GNinja -DCMAKE_BUILD_TYPE=Debug -DENABLE_CCACHE=YES .
                     ninja -v -k10 herbstclient
             - run:
                 when: always
