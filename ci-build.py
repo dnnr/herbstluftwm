@@ -25,6 +25,7 @@ if args.ccache:
     # Wipe stats and ensure reasonable limits:
     sp.check_call('ccache -z --max-size=500M', shell=True)
 
+    sp.check_call('ccache -o hash_dir=false', shell=True)
     sp.check_call('ccache -o log_file=/tmp/ccache.log', shell=True)
 
     # Print config for confirmation:
