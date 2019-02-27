@@ -24,6 +24,8 @@ build_dir = temp_dir.name
 if args.ccache:
     # Wipe stats and ensure reasonable limits:
     sp.check_call('ccache -z --max-size=500M', shell=True)
+    # Print config for confirmation:
+    sp.check_call('ccache -p', shell=True)
 
 build_env = os.environ.copy()
 build_env.update({
