@@ -22,7 +22,7 @@ jobs:
                     - tox-{{ .Branch }}
                     - tox-
             - command-with-ccache:
-                name: "Build with GCC-8 and run tests"
+                title: "Build with GCC-8 and run tests"
                 cache-id: gcc-8
                 command: |
                     ./ci-build.py \
@@ -30,7 +30,7 @@ jobs:
                     --ccache \
                     --build-type=Debug --ninja-args=-j2 --run-tests --pytest-args=--junitxml=test-results/tox/results.xml
             - command-with-ccache:
-                name: "Build with Clang-7 and run IWYU checks"
+                title: "Build with Clang-7 and run IWYU checks"
                 cache-id: clang-7
                 command: |
                     ./ci-build.py \
@@ -55,6 +55,7 @@ jobs:
                 name: "Build with ancient GCC on Ubuntu 14.04"
                 cache-id: trusty
                 command: |
+                    # Not using ci-build.py here because Python is tool old
                     cd /tmp
                     ccache -z --max-size=500M
                     export CC=gcc-4.8
@@ -75,7 +76,7 @@ commands:
         parameters:
             cache-id:
                 type: string
-            name:
+            title:
                 type: string
             command:
                 type: string
@@ -87,7 +88,7 @@ commands:
                     - ccache-<< parameters.cache-id >>-{{ .Branch }}
                     - ccache-<< parameters.cache-id >>-
             - run:
-                name: << parameters.name >>
+                name: << parameters.title >>
                 command: << parameters.command >>
             - save_cache:
                 name: "Save ccache: << parameters.cache-id >>"
