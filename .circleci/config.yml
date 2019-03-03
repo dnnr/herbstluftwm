@@ -18,8 +18,8 @@ commands:
             build_type:
                 type: string
             ci_build_args:
-                type: list
-                default: []
+                type: string
+                default: ""
             ninja_args:
                 type: string
                 default: ""
@@ -103,6 +103,7 @@ jobs:
                 build_type: "Debug"
                 # GCC-8 consumes too much RAM for unlimited parallelism:
                 ninja_args: -j2
+                build_args: '--iwyu'
             - build:
                 cc: clang-7
                 cxx: clang++-7
