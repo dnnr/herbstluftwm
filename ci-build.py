@@ -12,6 +12,7 @@ parser.add_argument('--run-tests', action='store_true')
 parser.add_argument('--build-docs', action='store_true')
 parser.add_argument('--cxx', type=str, required=True)
 parser.add_argument('--cc', type=str, required=True)
+parser.add_argument('--ninja-args', type=str, default='')
 parser.add_argument('--check-using-std', action='store_true')
 parser.add_argument('--iwyu', action='store_true')
 parser.add_argument('--ccache', nargs='?', metavar='ccache dir', type=str,
@@ -61,7 +62,7 @@ cmake_args = [
 
 sp.check_call(['cmake', *cmake_args, '..'], cwd=build_dir, env=build_env)
 
-sp.check_call(['bash', '-c', 'time ninja -v -k 10'], cwd=build_dir, env=build_env)
+sp.check_call(['bash', '-c', 'time ninja -v -k 10 ' + args.ninja_args], cwd=build_dir, env=build_env)
 
 if args.ccache:
     sp.check_call(['ccache', '-s'])
