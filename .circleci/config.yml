@@ -7,6 +7,9 @@ workflows:
             - disco
             - trusty
 
+orbs:
+    codecov: codecov/codecov@1.0.2
+
 jobs:
     disco:
         docker:
@@ -34,6 +37,8 @@ jobs:
                     --build-type=Debug \
                     --ninja-args=-j2 \
                     --run-tests --pytest-args="-k test_close -n 1 --junitxml=test-results/tox/results.xml"
+            - codecov/upload:
+                file: coverage.info
             - command_with_ccache:
                 title: "Build with Clang-7 and run IWYU checks"
                 ccache_id: clang-7
