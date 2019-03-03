@@ -52,7 +52,7 @@ jobs:
             - checkout
             - prep
             - command-with-ccache:
-                name: "Build with ancient GCC on Ubuntu 14.04"
+                title: "Build with ancient GCC on Ubuntu 14.04"
                 cache-id: trusty
                 command: |
                     # Not using ci-build.py here because Python is tool old
