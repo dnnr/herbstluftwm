@@ -11,7 +11,7 @@ executors:
 commands:
     command-with-ccache:
         parameters:
-            cache-prefix:
+            cache_prefix:
                 type: string
             command:
                 type: string
@@ -85,7 +85,7 @@ jobs:
         steps:
             - checkout
             - command-with-ccache:
-                cache-prefix: trusty
+                cache_prefix: trusty
                 command: |
                     cd /tmp
                     ccache -z --max-size=500M
