@@ -36,7 +36,8 @@ jobs:
                     ./ci-build.py \
                     --cxx=clang++-7 --cc=clang-7 \
                     --ccache \
-                    --build-type=Debug #--iwyu
+                    --build-type=Debug \
+                    --iwyu
             - save_cache:
                 name: "Save tox cache"
                 when: on_success
