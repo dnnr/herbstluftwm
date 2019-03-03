@@ -42,26 +42,22 @@ jobs:
                 command: |
                     # Delete .git/ to maximize ccache effectiveness (no version string mismatches)
                     rm -rf .git
+
             - restore_cache:
                 name: "Restore tox cache"
                 keys:
                     - tox-{{ .Branch }}-{{ .Revision }}
                     - tox-{{ .Branch }}
                     - tox-
-            - restore_cache:
-                name: "Restore ccache"
-                keys:
-                    - ccaches-disco-{{ .Branch }}-{{ .Revision }}
-                    - ccaches-disco-{{ .Branch }}
-                    - ccaches-disco-
-            - run:
-                name: "Run ci-build.sh"
+            - command-with-ccache:
+                cache_prefix: gcc-8
                 command: |
                     ./ci-build.py \
                     --cxx=g++-8 --cc=gcc-8 \
                     --ccache=~/.ccaches-disco/gcc-8 \
                     --build-type=Debug --ninja-args=-j2 --run-tests --pytest-args=--junitxml=test-results/tox/results.xml
-
+            - command-with-ccache:
+                cache_prefix: clang-7
                     ./ci-build.py \
                     --cxx=clang++-7 --cc=clang-7 \
                     --ccache=~/.ccaches-disco/clang-7 \
@@ -72,12 +68,6 @@ jobs:
                 key: tox-{{ .Branch }}-{{ .Revision }}
                 paths:
                     - .tox
-            - save_cache:
-                name: "Save ccache"
-                when: always
-                key: ccaches-disco-{{ .Branch }}-{{ .Revision }}
-                paths:
-                    - ~/.ccaches-disco
               # TODO: publish coverage
 
     build-on-trusty:
