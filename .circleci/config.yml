@@ -38,7 +38,7 @@ commands:
             - run:
                 name: "Build with << parameters.cc >>"
                 command: |
-                    /hlwm/ci-build.py \
+                    ./ci-build.py \
                     --cxx=<< parameters.cxx >> --cc=<< parameters.cc >> \
                     --build-type=<< parameters.build_type >> \
                     --ccache \
