@@ -28,14 +28,6 @@ commands:
                     - ccache-<< parameters.cxx >>-{{ .Branch }}
                     - ccache-<< parameters.cxx >>-
             - run:
-                when: always
-                name: "Print ccache stats (before)"
-                command: |
-                    # Set reasonable ccache limits:
-                    ccache --max-files=0 --max-size=500M
-                    ccache -s
-                    ccache -z
-            - run:
                 name: "Build with << parameters.cc >>"
                 command: |
                     ./ci-build.py \
@@ -43,10 +35,6 @@ commands:
                     --build-type=<< parameters.build_type >> \
                     --ccache \
                     << parameters.ci_build_args >>
-            - run:
-                when: always
-                name: "Print ccache stats (after)"
-                command: ccache -s
             - save_cache:
                 name: "Save ccache for << parameters.cc >>"
                 when: always
