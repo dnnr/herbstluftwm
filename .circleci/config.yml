@@ -20,9 +20,6 @@ commands:
             ci_build_args:
                 type: string
                 default: ""
-            ninja_args:
-                type: string
-                default: ""
         steps:
             - restore_cache:
                 name: "Restore ccache for << parameters.cc >>"
@@ -45,7 +42,6 @@ commands:
                     --cxx=<< parameters.cxx >> --cc=<< parameters.cc >> \
                     --build-type=<< parameters.build_type >> \
                     --ccache \
-                    --ninja-args=<< parameters.ninja_args >> \
                     << parameters.ci_build_args >>
             - run:
                 when: always
@@ -81,11 +77,6 @@ commands:
                 key: tox-{{ .Branch }}-{{ .Revision }}
                 paths:
                     - .tox
-    iwyu:
-        steps:
-            - run:
-                name: "Run include-what-you-use"
-                command: ./iwyu.sh
 
 jobs:
     build-and-test-on-disco:
@@ -102,15 +93,13 @@ jobs:
                 cxx: g++-8
                 build_type: "Debug"
                 # GCC-8 consumes too much RAM for unlimited parallelism:
-                ninja_args: -j2
-                ci_build_args: '--iwyu'
+                ci_build_args: '--ninja-args=-j2 --iwyu'
             - build:
                 cc: clang-7
                 cxx: clang++-7
                 build_type: "Debug"
             # - test:
                 # builddir: build-clang-7
-            # - iwyu
               # TODO: publish coverage
 
     build-on-trusty:
