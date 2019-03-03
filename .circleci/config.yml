@@ -10,7 +10,7 @@ workflows:
 jobs:
     disco:
         docker:
-            - image: hlwm/ci:disco
+            - image: dnnr/hlwm-ci:disco
         steps:
             - checkout
             - prep
