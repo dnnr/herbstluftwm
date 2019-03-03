@@ -89,6 +89,8 @@ jobs:
                 command: |
                     cd /tmp
                     ccache -z --max-size=500M
+                    export CC=gcc-4.8
+                    export CXX=g++-4.8
                     cmake -GNinja -DWITH_DOCUMENTATION=NO -DENABLE_CCACHE=YES $CIRCLE_WORKING_DIRECTORY
                     time ninja -v -k10
                     ccache -s
