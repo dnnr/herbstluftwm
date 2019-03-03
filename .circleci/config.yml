@@ -23,7 +23,7 @@ jobs:
                     - tox-
             - command_with_ccache:
                 title: "Build with GCC-8 and run tests"
-                cache-id: gcc-8
+                ccache_id: gcc-8
                 command: |
                     ./ci-build.py \
                     --cxx=g++-8 --cc=gcc-8 \
@@ -31,7 +31,7 @@ jobs:
                     --build-type=Debug --ninja-args=-j2 --run-tests --pytest-args=--junitxml=test-results/tox/results.xml
             - command_with_ccache:
                 title: "Build with Clang-7 and run IWYU checks"
-                cache-id: clang-7
+                ccache_id: clang-7
                 command: |
                     ./ci-build.py \
                     --cxx=clang++-7 --cc=clang-7 \
@@ -55,7 +55,7 @@ jobs:
             - prep
             - command_with_ccache:
                 title: "Build with ancient GCC on Ubuntu 14.04"
-                cache-id: trusty
+                ccache_id: trusty
                 command: |
                     # Not using ci-build.py here because Python is tool old
                     cd /tmp
@@ -76,7 +76,7 @@ commands:
                     rm -rf .git
     command_with_ccache:
         parameters:
-            cache-id:
+            ccache_id:
                 type: string
             title:
                 type: string
@@ -84,17 +84,17 @@ commands:
                 type: string
         steps:
             - restore_cache:
-                name: "Restore ccache: << parameters.cache-id >>"
+                name: "Restore ccache: << parameters.ccache_id >>"
                 keys:
-                    - ccache-<< parameters.cache-id >>-{{ .Branch }}-{{ .Revision }}
-                    - ccache-<< parameters.cache-id >>-{{ .Branch }}
-                    - ccache-<< parameters.cache-id >>-
+                    - ccache-<< parameters.ccache_id >>-{{ .Branch }}-{{ .Revision }}
+                    - ccache-<< parameters.ccache_id >>-{{ .Branch }}
+                    - ccache-<< parameters.ccache_id >>-
             - run:
                 name: << parameters.title >>
                 command: << parameters.command >>
             - save_cache:
-                name: "Save ccache: << parameters.cache-id >>"
+                name: "Save ccache: << parameters.ccache_id >>"
                 when: always
-                key: ccache-<< parameters.cache-id >>-{{ .Branch }}-{{ .Revision }}
+                key: ccache-<< parameters.ccache_id >>-{{ .Branch }}-{{ .Revision }}
                 paths:
                     - ~/.ccache
