@@ -58,6 +58,7 @@ jobs:
                     --build-type=Debug --ninja-args=-j2 --run-tests --pytest-args=--junitxml=test-results/tox/results.xml
             - command-with-ccache:
                 cache_prefix: clang-7
+                command: |
                     ./ci-build.py \
                     --cxx=clang++-7 --cc=clang-7 \
                     --ccache=~/.ccaches-disco/clang-7 \
