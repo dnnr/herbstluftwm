@@ -13,6 +13,7 @@ parser.add_argument('--build-docs', action='store_true')
 parser.add_argument('--cxx', type=str, required=True)
 parser.add_argument('--cc', type=str, required=True)
 parser.add_argument('--ninja-args', type=str, default='')
+parser.add_argument('--pytest-args', type=str, default='')
 parser.add_argument('--check-using-std', action='store_true')
 parser.add_argument('--iwyu', action='store_true')
 parser.add_argument('--ccache', nargs='?', metavar='ccache dir', type=str,
@@ -80,4 +81,4 @@ if args.run_tests:
     tox_env.update({
         'PWD': build_dir,
         })
-    sp.check_call(f'tox -e py37 -- -n auto -v -x', shell=True, cwd=build_dir, env=tox_env)
+    sp.check_call(f'tox -e py37 -- -n auto -v -x ' + args.pytest_args, shell=True, cwd=build_dir, env=tox_env)
