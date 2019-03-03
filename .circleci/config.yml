@@ -8,82 +8,6 @@ executors:
         docker:
             - image: hlwm/ci:trusty
 
-commands:
-    build:
-        parameters:
-            cc:
-                type: string
-            cxx:
-                type: string
-            run_tests:
-                type: boolean
-                default: False
-            ci_build_args:
-                type: string
-                default: ""
-        steps:
-            - when:
-                condition: << parameters.run_tests >>
-                steps:
-                    - restore_cache:
-                        name: "Restore tox cache"
-                        keys:
-                            - tox-{{ .Branch }}-{{ .Revision }}
-                            - tox-{{ .Branch }}
-                            - tox-
-            - restore_cache:
-                name: "Restore ccache for << parameters.cc >>"
-                keys:
-                    - ccache-<< parameters.cxx >>-{{ .Branch }}-{{ .Revision }}
-                    - ccache-<< parameters.cxx >>-{{ .Branch }}
-                    - ccache-<< parameters.cxx >>-
-            - run:
-                name: "Run ci-build.sh with << parameters.cc >>"
-                command: |
-                    ./ci-build.py \
-                    --cxx=<< parameters.cxx >> --cc=<< parameters.cc >> \
-                    --ccache \
-                    << parameters.ci_build_args >>
-            - when:
-                condition: << parameters.run_tests >>
-                steps:
-                    - save_cache:
-                        name: "Save tox cache"
-                        when: on_success
-                        key: tox-{{ .Branch }}-{{ .Revision }}
-                        paths:
-                            - .tox
-            - save_cache:
-                name: "Save ccache for << parameters.cc >>"
-                when: always
-                key: ccache-<< parameters.cxx >>-{{ .Branch }}-{{ .Revision }}
-                paths:
-                    - ~/.ccache
-    test:
-        parameters:
-            builddir:
-                type: string
-        steps:
-            - restore_cache:
-                name: "Restore tox cache"
-                keys:
-                    - tox-{{ .Branch }}-{{ .Revision }}
-                    - tox-{{ .Branch }}
-                    - tox-
-            - run:
-                name: "Run tests"
-                command: |
-                    cd << parameters.builddir >>
-                    ${RUN_TOX} && tox -e py37 -- -n auto -v -x --junitxml=test-results/tox/results.xml
-            - store_test_results:
-                path: test-results
-            - save_cache:
-                name: "Save tox cache"
-                when: on_success
-                key: tox-{{ .Branch }}-{{ .Revision }}
-                paths:
-                    - .tox
-
 jobs:
     build-and-test-on-disco:
         executor: disco
@@ -94,19 +18,42 @@ jobs:
                 command: |
                     # Delete .git/ to maximize ccache effectiveness (no version string mismatches)
                     rm -rf .git
-            - build:
-                cc: gcc-8
-                cxx: g++-8
-                run_tests: True
-                # Using -j2 here because GCC-8 consumes too much RAM for
-                # unlimited parallelism:
-                ci_build_args: '--build-type=Debug --ninja-args=-j2 --iwyu --run-tests --pytest-args=--junitxml=test-results/tox/results.xml'
-            - build:
-                cc: clang-7
-                cxx: clang++-7
-                ci_build_args: '--build-type=Debug'
-            # - test:
-                # builddir: build-clang-7
+            - restore_cache:
+                name: "Restore tox cache"
+                keys:
+                    - tox-{{ .Branch }}-{{ .Revision }}
+                    - tox-{{ .Branch }}
+                    - tox-
+            - restore_cache:
+                name: "Restore ccache"
+                keys:
+                    - ccaches-disco-{{ .Branch }}-{{ .Revision }}
+                    - ccaches-disco-{{ .Branch }}
+                    - ccaches-disco-
+            - run:
+                name: "Run ci-build.sh"
+                command: |
+                    ./ci-build.py \
+                    --cxx=gcc-8 --cc=g++-8 \
+                    --ccache=~/.ccaches-disco/gcc-8 \
+                    --build-type=Debug --ninja-args=-j2 --run-tests --pytest-args=--junitxml=test-results/tox/results.xml
+
+                    ./ci-build.py \
+                    --cxx=clang-7 --cc=clang++-7 \
+                    --ccache=~/.ccaches-disco/clang-7 \
+                    --build-type=Debug --iwyu
+            - save_cache:
+                name: "Save tox cache"
+                when: on_success
+                key: tox-{{ .Branch }}-{{ .Revision }}
+                paths:
+                    - .tox
+            - save_cache:
+                name: "Save ccache"
+                when: always
+                key: ccaches-disco-{{ .Branch }}-{{ .Revision }}
+                paths:
+                    - ~/.ccaches-disco
               # TODO: publish coverage
 
     build-on-trusty:
