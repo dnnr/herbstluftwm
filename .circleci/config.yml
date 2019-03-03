@@ -9,6 +9,13 @@ executors:
             - image: hlwm/ci:trusty
 
 commands:
+    prep:
+        steps:
+            - run:
+                name: "Misc. preparations"
+                command: |
+                    # Delete .git/ to maximize ccache effectiveness (no version string mismatches)
+                    rm -rf .git
     command-with-ccache:
         parameters:
             cache_prefix:
@@ -37,11 +44,7 @@ jobs:
         executor: disco
         steps:
             - checkout
-            - run:
-                name: "Misc. preparations"
-                command: |
-                    # Delete .git/ to maximize ccache effectiveness (no version string mismatches)
-                    rm -rf .git
+            - prep
 
             - restore_cache:
                 name: "Restore tox cache"
@@ -75,11 +78,7 @@ jobs:
         executor: trusty
         steps:
             - checkout
-            - run:
-                name: "Misc. preparations"
-                command: |
-                    # Delete .git/ to maximize ccache effectiveness (no version string mismatches)
-                    rm -rf .git
+            - prep
             - command-with-ccache:
                 cache_prefix: trusty
                 command: |
