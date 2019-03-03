@@ -97,5 +97,5 @@ workflows:
     version: 2
     ci_checks:
         jobs:
-            - build-and-test-on-disco
+            # - build-and-test-on-disco
             - build-on-trusty
