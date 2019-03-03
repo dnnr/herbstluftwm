@@ -7,6 +7,7 @@ import tempfile
 from pathlib import Path
 
 parser = argparse.ArgumentParser()
+parser.add_argument('--build-dir', type=str, required=True)
 parser.add_argument('--build-type', type=str, choices=('Release', 'Debug'), required=True)
 parser.add_argument('--run-tests', action='store_true')
 parser.add_argument('--build-docs', action='store_true')
@@ -21,8 +22,7 @@ parser.add_argument('--ccache', nargs='?', metavar='ccache dir', type=str,
 args = parser.parse_args()
 
 repo_root = Path(__file__).resolve().parent
-temp_dir = tempfile.TemporaryDirectory(dir=repo_root, prefix='build.')
-build_dir = Path(temp_dir.name)
+build_dir = Path(args.build_dir)
 
 if args.check_using_std:
     sp.check_call(['./ci-check-using-std.sh'], cwd=repo_root)
@@ -35,9 +35,6 @@ if args.ccache:
     conf = Path(os.environ.get('CCACHE_DIR') or (Path.home() / '.ccache')) / 'ccache.conf'
     if conf.exists():
         conf.unlink()
-
-    # Ignore the working directory on cache lookups
-    sp.check_call('ccache -o hash_dir=false', shell=True)
 
     # Set a reasonable size limit
     sp.check_call('ccache --max-size=500M', shell=True)

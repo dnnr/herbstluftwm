@@ -32,6 +32,7 @@ jobs:
                     #    RAM for full parallelism
                     #  - CircleCI's Xvfb is too fragile to handle parallel tox
                     ./ci-build.py \
+                    --build-dir build-gcc-8 \
                     --cxx=g++-8 --cc=gcc-8 \
                     --ccache \
                     --build-type=Debug \
@@ -42,6 +43,7 @@ jobs:
                 ccache_id: clang-7
                 command: |
                     ./ci-build.py \
+                    --build-dir build-clang-7 \
                     --cxx=clang++-7 --cc=clang-7 \
                     --ccache \
                     --build-type=Debug \
