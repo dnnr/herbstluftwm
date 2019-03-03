@@ -17,6 +17,9 @@ commands:
                 type: string
             build_type:
                 type: string
+            ci_build_args:
+                type: list
+                default: []
             ninja_args:
                 type: string
                 default: ""
@@ -42,7 +45,8 @@ commands:
                     --cxx=<< parameters.cxx >> --cc=<< parameters.cc >> \
                     --build-type=<< parameters.build_type >> \
                     --ccache \
-                    --ninja-args=<< parameters.ninja_args >>
+                    --ninja-args=<< parameters.ninja_args >> \
+                    << parameters.ci_build_args >>
             - run:
                 when: always
                 name: "Print ccache stats (after)"
