@@ -38,13 +38,15 @@ commands:
             - run:
                 name: "Build with << parameters.cc >>"
                 command: |
-                    builddir=build-<< parameters.cc >>
-                    [[ -d $builddir ]] || mkdir $builddir
-                    cd $builddir
-                    export CC=<< parameters.cc >>
-                    export CXX=<< parameters.cxx >>
-                    cmake -GNinja -DCMAKE_BUILD_TYPE=<< parameters.build_type >> -DENABLE_CCACHE=YES ..
-                    ninja -v -k1 << parameters.ninja_args >> herbstclient herbstluftwm
+                    /hlwm/ci-build.py --cxx=<< parameters.cxx >> --cc=<< parameters.cc >> --build-type=Debug --ccache &&
+                # command: |
+                    # builddir=build-<< parameters.cc >>
+                    # [[ -d $builddir ]] || mkdir $builddir
+                    # cd $builddir
+                    # export CC=<< parameters.cc >>
+                    # export CXX=<< parameters.cxx >>
+                    # cmake -GNinja -DCMAKE_BUILD_TYPE=<< parameters.build_type >> -DENABLE_CCACHE=YES ..
+                    # ninja -v -k1 << parameters.ninja_args >> herbstclient herbstluftwm
             - run:
                 when: always
                 name: "Print ccache stats (after)"
