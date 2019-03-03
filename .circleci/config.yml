@@ -16,7 +16,7 @@ commands:
             cxx:
                 type: string
             run_tests:
-                type: bool
+                type: boolean
                 default: False
             ci_build_args:
                 type: string
