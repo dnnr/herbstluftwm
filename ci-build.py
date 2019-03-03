@@ -81,4 +81,4 @@ if args.run_tests:
     tox_env.update({
         'PWD': build_dir,
         })
-    sp.check_call(f'tox -e py37 -- -n auto -v -x -k test_close ' + args.pytest_args, shell=True, cwd=build_dir, env=tox_env)
+    sp.check_call(f'tox -e py37 -- -n auto -v -x ' + args.pytest_args, shell=True, cwd=build_dir, env=tox_env)
