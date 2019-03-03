@@ -75,6 +75,11 @@ jobs:
         executor: trusty
         steps:
             - checkout
+            - run:
+                name: "Misc. preparations"
+                command: |
+                    # Delete .git/ to maximize ccache effectiveness (no version string mismatches)
+                    rm -rf .git
             - command-with-ccache:
                 cache_prefix: trusty
                 command: |
