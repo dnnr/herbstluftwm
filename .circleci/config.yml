@@ -1,13 +1,5 @@
 version: 2.1
 
-executors:
-    disco:
-        docker:
-            - image: hlwm/ci:disco
-    trusty:
-        docker:
-            - image: hlwm/ci:trusty
-
 workflows:
     version: 2
     ci_checks:
@@ -17,7 +9,8 @@ workflows:
 
 jobs:
     disco:
-        executor: disco
+        docker:
+            - image: hlwm/ci:disco
         steps:
             - checkout
             - prep
@@ -53,7 +46,8 @@ jobs:
               # TODO: publish coverage
 
     trusty:
-        executor: trusty
+        docker:
+            - image: hlwm/ci:trusty
         steps:
             - checkout
             - prep
