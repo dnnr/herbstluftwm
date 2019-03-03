@@ -14,7 +14,6 @@ jobs:
         steps:
             - checkout
             - prep
-
             - restore_cache:
                 name: "Restore tox cache"
                 keys:
