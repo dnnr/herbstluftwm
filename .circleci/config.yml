@@ -21,7 +21,7 @@ jobs:
                     - tox-{{ .Branch }}-{{ .Revision }}
                     - tox-{{ .Branch }}
                     - tox-
-            - command-with-ccache:
+            - command_with_ccache:
                 title: "Build with GCC-8 and run tests"
                 cache-id: gcc-8
                 command: |
@@ -29,7 +29,7 @@ jobs:
                     --cxx=g++-8 --cc=gcc-8 \
                     --ccache \
                     --build-type=Debug --ninja-args=-j2 --run-tests --pytest-args=--junitxml=test-results/tox/results.xml
-            - command-with-ccache:
+            - command_with_ccache:
                 title: "Build with Clang-7 and run IWYU checks"
                 cache-id: clang-7
                 command: |
@@ -51,7 +51,7 @@ jobs:
         steps:
             - checkout
             - prep
-            - command-with-ccache:
+            - command_with_ccache:
                 title: "Build with ancient GCC on Ubuntu 14.04"
                 cache-id: trusty
                 command: |
@@ -72,7 +72,7 @@ commands:
                 command: |
                     # Delete .git/ to maximize ccache effectiveness (no version string mismatches)
                     rm -rf .git
-    command-with-ccache:
+    command_with_ccache:
         parameters:
             cache-id:
                 type: string
