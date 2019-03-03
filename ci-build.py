@@ -86,4 +86,4 @@ if args.run_tests:
     sp.check_call('lcov --capture --directory . --output-file coverage.info', shell=True, cwd=build_dir)
     sp.check_call('lcov --remove coverage.info "/usr/*" --output-file coverage.info', shell=True, cwd=build_dir)
     sp.check_call('lcov --list coverage.info', shell=True, cwd=build_dir)
-    (repo_root / 'coverage.info').rename(build_dir / 'coverage.info')
+    (build_dir / 'coverage.info').rename(repo_root / 'coverage.info')
