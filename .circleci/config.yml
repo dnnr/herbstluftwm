@@ -18,24 +18,24 @@ commands:
                     rm -rf .git
     command-with-ccache:
         parameters:
-            cache_prefix:
+            cache-id:
                 type: string
             command:
                 type: string
         steps:
             - restore_cache:
-                name: "Restore ccache: << parameters.cache_prefix >>"
+                name: "Restore ccache: << parameters.cache-id >>"
                 keys:
-                    - ccache-<< parameters.cache_prefix >>-{{ .Branch }}-{{ .Revision }}
-                    - ccache-<< parameters.cache_prefix >>-{{ .Branch }}
-                    - ccache-<< parameters.cache_prefix >>-
+                    - ccache-<< parameters.cache-id >>-{{ .Branch }}-{{ .Revision }}
+                    - ccache-<< parameters.cache-id >>-{{ .Branch }}
+                    - ccache-<< parameters.cache-id >>-
             - run:
                 name: "Run command"
                 command: << parameters.command >>
             - save_cache:
-                name: "Save ccache: << parameters.cache_prefix >>"
+                name: "Save ccache: << parameters.cache-id >>"
                 when: always
-                key: ccache-<< parameters.cache_prefix >>-{{ .Branch }}-{{ .Revision }}
+                key: ccache-<< parameters.cache-id >>-{{ .Branch }}-{{ .Revision }}
                 paths:
                     - ~/.ccache
 
@@ -53,14 +53,14 @@ jobs:
                     - tox-{{ .Branch }}
                     - tox-
             - command-with-ccache:
-                cache_prefix: gcc-8
+                cache-id: gcc-8
                 command: |
                     ./ci-build.py \
                     --cxx=g++-8 --cc=gcc-8 \
                     --ccache=~/.ccaches-disco/gcc-8 \
                     --build-type=Debug --ninja-args=-j2 --run-tests --pytest-args=--junitxml=test-results/tox/results.xml
             - command-with-ccache:
-                cache_prefix: clang-7
+                cache-id: clang-7
                 command: |
                     ./ci-build.py \
                     --cxx=clang++-7 --cc=clang-7 \
@@ -80,7 +80,7 @@ jobs:
             - checkout
             - prep
             - command-with-ccache:
-                cache_prefix: trusty
+                cache-id: trusty
                 command: |
                     cd /tmp
                     ccache -z --max-size=500M
