@@ -3,10 +3,10 @@ version: 2.1
 executors:
     disco:
         docker:
-            - image: dnnr/hlwm-ci:disco
+            - image: hlwm/ci:disco
     trusty:
         docker:
-            - image: dnnr/hlwm-ci:trusty
+            - image: hlwm/ci:trusty
 
 commands:
     build:
