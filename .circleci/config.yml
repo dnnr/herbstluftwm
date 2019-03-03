@@ -105,7 +105,6 @@ commands:
                 command: << parameters.command >>
             - save_cache:
                 name: "Save ccache: << parameters.ccache_id >>"
-                when: always
                 key: ccache-<< parameters.ccache_id >>-{{ .Branch }}-{{ .Revision }}
                 paths:
                     - ~/.ccache
