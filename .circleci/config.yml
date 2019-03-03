@@ -15,10 +15,22 @@ commands:
                 type: string
             cxx:
                 type: string
+            run_tests:
+                type: bool
+                default: False
             ci_build_args:
                 type: string
                 default: ""
         steps:
+            - when:
+                condition: << parameters.run_tests >>
+                steps:
+                    - restore_cache:
+                        name: "Restore tox cache"
+                        keys:
+                            - tox-{{ .Branch }}-{{ .Revision }}
+                            - tox-{{ .Branch }}
+                            - tox-
             - restore_cache:
                 name: "Restore ccache for << parameters.cc >>"
                 keys:
@@ -32,6 +44,15 @@ commands:
                     --cxx=<< parameters.cxx >> --cc=<< parameters.cc >> \
                     --ccache \
                     << parameters.ci_build_args >>
+            - when:
+                condition: << parameters.run_tests >>
+                steps:
+                    - save_cache:
+                        name: "Save tox cache"
+                        when: on_success
+                        key: tox-{{ .Branch }}-{{ .Revision }}
+                        paths:
+                            - .tox
             - save_cache:
                 name: "Save ccache for << parameters.cc >>"
                 when: always
