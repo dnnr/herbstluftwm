@@ -12,11 +12,11 @@ workflows:
     version: 2
     ci_checks:
         jobs:
-            - build-and-test-on-disco
-            - build-on-trusty
+            - disco
+            - trusty
 
 jobs:
-    build-and-test-on-disco:
+    disco:
         executor: disco
         steps:
             - checkout
@@ -50,7 +50,7 @@ jobs:
                     - .tox
               # TODO: publish coverage
 
-    build-on-trusty:
+    trusty: build-on-trusty:
         executor: trusty
         steps:
             - checkout
