@@ -5,7 +5,7 @@ workflows:
     ci_checks:
         jobs:
             - disco
-            - trusty
+            # - trusty
 
 orbs:
     codecov: codecov/codecov@1.0.2
