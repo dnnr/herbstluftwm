@@ -97,9 +97,10 @@ jobs:
             - build:
                 cc: gcc-8
                 cxx: g++-8
+                run_tests: True
                 # Using -j2 here because GCC-8 consumes too much RAM for
                 # unlimited parallelism:
-                ci_build_args: '--build-type=Debug --ninja-args=-j2 --iwyu'
+                ci_build_args: '--build-type=Debug --ninja-args=-j2 --iwyu --run-tests --pytest-args=--junitxml=test-results/tox/results.xml'
             - build:
                 cc: clang-7
                 cxx: clang++-7
