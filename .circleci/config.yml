@@ -107,9 +107,9 @@ jobs:
                 cc: clang-7
                 cxx: clang++-7
                 build_type: "Debug"
-            - test:
-                builddir: build-clang-7
-            - iwyu
+            # - test:
+                # builddir: build-clang-7
+            # - iwyu
               # TODO: publish coverage
 
     build-on-trusty:
