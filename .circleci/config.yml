@@ -34,12 +34,12 @@ jobs:
                 name: "Run ci-build.sh"
                 command: |
                     ./ci-build.py \
-                    --cxx=gcc-8 --cc=g++-8 \
+                    --cxx=g++-8 --cc=gcc-8 \
                     --ccache=~/.ccaches-disco/gcc-8 \
                     --build-type=Debug --ninja-args=-j2 --run-tests --pytest-args=--junitxml=test-results/tox/results.xml
 
                     ./ci-build.py \
-                    --cxx=clang-7 --cc=clang++-7 \
+                    --cxx=clang++-7 --cc=clang-7 \
                     --ccache=~/.ccaches-disco/clang-7 \
                     --build-type=Debug --iwyu
             - save_cache:
