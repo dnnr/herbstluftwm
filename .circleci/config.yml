@@ -126,4 +126,4 @@ workflows:
     ci_checks:
         jobs:
             - build-and-test-on-disco
-            - build-on-trusty
+            # - build-on-trusty
