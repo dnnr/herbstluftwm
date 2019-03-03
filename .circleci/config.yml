@@ -38,7 +38,11 @@ commands:
             - run:
                 name: "Build with << parameters.cc >>"
                 command: |
-                    /hlwm/ci-build.py --cxx=<< parameters.cxx >> --cc=<< parameters.cc >> --build-type=<< parameters.build_type >> --ccache --ninja-args=<< parameters.ninja_args >> &&
+                    /hlwm/ci-build.py \
+                    --cxx=<< parameters.cxx >> --cc=<< parameters.cc >> \
+                    --build-type=<< parameters.build_type >> \
+                    --ccache \
+                    --ninja-args=<< parameters.ninja_args >>
                 # command: |
                     # builddir=build-<< parameters.cc >>
                     # [[ -d $builddir ]] || mkdir $builddir
