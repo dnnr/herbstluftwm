@@ -8,6 +8,30 @@ executors:
         docker:
             - image: hlwm/ci:trusty
 
+commands:
+    command-with-ccache:
+        parameters:
+            cache-prefix:
+                type: string
+            command:
+                type: string
+        steps:
+            - restore_cache:
+                name: "Restore ccache"
+                keys:
+                    - ccache-<< parameters.cache_prefix >>-{{ .Branch }}-{{ .Revision }}
+                    - ccache-<< parameters.cache_prefix >>-{{ .Branch }}
+                    - ccache-<< parameters.cache_prefix >>-
+            - run:
+                name: "Run command"
+                command: << parameters.command >>
+            - save_cache:
+                name: "Save ccache"
+                when: always
+                key: ccache-<< parameters.cache_prefix >>-{{ .Branch }}-{{ .Revision }}
+                paths:
+                    - ~/.ccache
+
 jobs:
     build-and-test-on-disco:
         executor: disco
@@ -60,10 +84,18 @@ jobs:
         executor: trusty
         steps:
             - checkout
+            - command-with-ccache:
+                cache-prefix: trusty
+                command: |
+                    cd /tmp
+                    ccache -z --max-size=500M
+                    cmake -GNinja -DWITH_DOCUMENTATION=NO -DENABLE_CCACHE=YES $CIRCLE_WORKING_DIRECTORY
+                    time ninja -v -k10
+                    ccache -s
 
 workflows:
     version: 2
     ci_checks:
         jobs:
             - build-and-test-on-disco
-            # - build-on-trusty
+            - build-on-trusty
