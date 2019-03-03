@@ -50,7 +50,7 @@ jobs:
                     - .tox
               # TODO: publish coverage
 
-    trusty: build-on-trusty:
+    trusty:
         executor: trusty
         steps:
             - checkout
