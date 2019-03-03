@@ -43,6 +43,8 @@ jobs:
                 key: tox-{{ .Branch }}-{{ .Revision }}
                 paths:
                     - .tox
+            - store_test_results:
+                path: test-results
               # TODO: publish coverage
 
     trusty:
