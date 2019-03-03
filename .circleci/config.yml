@@ -17,7 +17,7 @@ commands:
                 type: string
         steps:
             - restore_cache:
-                name: "Restore ccache"
+                name: "Restore ccache: << parameters.cache_prefix >>"
                 keys:
                     - ccache-<< parameters.cache_prefix >>-{{ .Branch }}-{{ .Revision }}
                     - ccache-<< parameters.cache_prefix >>-{{ .Branch }}
@@ -26,7 +26,7 @@ commands:
                 name: "Run command"
                 command: << parameters.command >>
             - save_cache:
-                name: "Save ccache"
+                name: "Save ccache: << parameters.cache_prefix >>"
                 when: always
                 key: ccache-<< parameters.cache_prefix >>-{{ .Branch }}-{{ .Revision }}
                 paths:
