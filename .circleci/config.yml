@@ -80,7 +80,8 @@ jobs:
                 cc: gcc-8
                 cxx: g++-8
                 build_type: "Debug"
-                # GCC-8 consumes too much RAM for unlimited parallelism:
+                # Using -j2 here because GCC-8 consumes too much RAM for
+                # unlimited parallelism:
                 ci_build_args: '--ninja-args=-j2 --iwyu'
             - build:
                 cc: clang-7
