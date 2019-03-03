@@ -8,6 +8,13 @@ executors:
         docker:
             - image: hlwm/ci:trusty
 
+workflows:
+    version: 2
+    ci_checks:
+        jobs:
+            - build-and-test-on-disco
+            - build-on-trusty
+
 commands:
     prep:
         steps:
@@ -89,10 +96,3 @@ jobs:
                     cmake -GNinja -DWITH_DOCUMENTATION=NO -DENABLE_CCACHE=YES $CIRCLE_WORKING_DIRECTORY
                     time ninja -v -k10
                     ccache -s
-
-workflows:
-    version: 2
-    ci_checks:
-        jobs:
-            - build-and-test-on-disco
-            - build-on-trusty
