@@ -15,8 +15,6 @@ commands:
                 type: string
             cxx:
                 type: string
-            build_type:
-                type: string
             ci_build_args:
                 type: string
                 default: ""
@@ -32,7 +30,6 @@ commands:
                 command: |
                     ./ci-build.py \
                     --cxx=<< parameters.cxx >> --cc=<< parameters.cc >> \
-                    --build-type=<< parameters.build_type >> \
                     --ccache \
                     << parameters.ci_build_args >>
             - save_cache:
@@ -79,14 +76,13 @@ jobs:
             - build:
                 cc: gcc-8
                 cxx: g++-8
-                build_type: "Debug"
                 # Using -j2 here because GCC-8 consumes too much RAM for
                 # unlimited parallelism:
-                ci_build_args: '--ninja-args=-j2 --iwyu'
+                ci_build_args: '--build-type=Debug --ninja-args=-j2 --iwyu'
             - build:
                 cc: clang-7
                 cxx: clang++-7
-                build_type: "Debug"
+                ci_build_args: '--build-type=Debug'
             # - test:
                 # builddir: build-clang-7
               # TODO: publish coverage
@@ -95,10 +91,6 @@ jobs:
         executor: trusty
         steps:
             - checkout
-            - build:
-                cc: gcc-4.8
-                cxx: g++-4.8
-                build_type: "Release"
 
 workflows:
     version: 2
