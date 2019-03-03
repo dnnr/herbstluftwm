@@ -23,6 +23,7 @@ args = parser.parse_args()
 
 repo_root = Path(__file__).resolve().parent
 build_dir = Path(args.build_dir)
+build_dir.mkdir(exist_ok=True)
 
 if args.check_using_std:
     sp.check_call(['./ci-check-using-std.sh'], cwd=repo_root)
