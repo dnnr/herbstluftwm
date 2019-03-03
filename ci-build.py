@@ -22,7 +22,7 @@ args = parser.parse_args()
 
 repo_root = Path(__file__).resolve().parent
 temp_dir = tempfile.TemporaryDirectory(dir=repo_root, prefix='build.')
-build_dir = temp_dir.name
+build_dir = Path(temp_dir.name)
 
 if args.check_using_std:
     sp.check_call(['./ci-check-using-std.sh'], cwd=repo_root)
@@ -86,3 +86,4 @@ if args.run_tests:
     sp.check_call('lcov --capture --directory . --output-file coverage.info', shell=True, cwd=build_dir)
     sp.check_call('lcov --remove coverage.info "/usr/*" --output-file coverage.info', shell=True, cwd=build_dir)
     sp.check_call('lcov --list coverage.info', shell=True, cwd=build_dir)
+    (repo_root / 'coverage.info').rename(build_dir / 'coverage.info')
