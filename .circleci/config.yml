@@ -33,7 +33,7 @@ jobs:
                     --ccache \
                     --build-type=Debug \
                     --ninja-args=-j2 \
-                    --run-tests --pytest-args="-n 1 --junitxml=test-results/tox/results.xml"
+                    --run-tests --pytest-args="-k test_close -n 1 --junitxml=test-results/tox/results.xml"
             - command_with_ccache:
                 title: "Build with Clang-7 and run IWYU checks"
                 ccache_id: clang-7
