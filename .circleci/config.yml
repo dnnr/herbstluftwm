@@ -38,7 +38,7 @@ commands:
                     - ccache-<< parameters.cxx >>-{{ .Branch }}
                     - ccache-<< parameters.cxx >>-
             - run:
-                name: "Build with << parameters.cc >>"
+                name: "Run ci-build.sh with << parameters.cc >>"
                 command: |
                     ./ci-build.py \
                     --cxx=<< parameters.cxx >> --cc=<< parameters.cc >> \
