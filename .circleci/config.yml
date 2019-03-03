@@ -58,6 +58,7 @@ jobs:
                 path: test-results
             - codecov/upload:
                 file: coverage.info
+                flags: circleci
 
     trusty:
         docker:
