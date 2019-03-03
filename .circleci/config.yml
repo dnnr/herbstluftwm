@@ -25,10 +25,14 @@ jobs:
                 title: "Build with GCC-8 and run tests"
                 ccache_id: gcc-8
                 command: |
+                    # Note: We're running ninja with -j2 because GCC-8 consume
+                    # too much RAM for full parallelism.
                     ./ci-build.py \
                     --cxx=g++-8 --cc=gcc-8 \
                     --ccache \
-                    --build-type=Debug --ninja-args=-j2 --run-tests --pytest-args=--junitxml=test-results/tox/results.xml
+                    --build-type=Debug \
+                    --ninja-args=-j2 \
+                    --run-tests --pytest-args=--junitxml=test-results/tox/results.xml
             - command_with_ccache:
                 title: "Build with Clang-7 and run IWYU checks"
                 ccache_id: clang-7
