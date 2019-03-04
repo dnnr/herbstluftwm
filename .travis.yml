@@ -36,6 +36,7 @@ jobs:
                     /hlwm/ci-build.py --build-dir=/hlwm/build-gcc-8 --check-using-std --cxx=g++-8 --cc=gcc-8 --build-type=Debug --ccache=/.ccaches/gcc-8 --run-tests
                 '
 
+    exclude:
         - name: "Build with ancient GCC on Ubuntu 14.04"
           env: TRAVIS_CACHE_ID=trusty
           cache:
