@@ -28,3 +28,4 @@ installing herbstluftwm on your system).
 You are welcome to join the IRC channel `#herbstluftwm` on `irc.freenode.net`.
 
 // vim: ft=asciidoc tw=80
+
