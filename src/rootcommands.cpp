@@ -47,6 +47,7 @@ int RootCommands::set_attr_cmd(Input in, Output output) {
             << new_value << "\" is not a valid value for "
             << a->name() << ": "
             << error_message << endl;
+        output << "making the coverage even worse, for the lulz";
         return HERBST_INVALID_ARGUMENT;
     }
 }
