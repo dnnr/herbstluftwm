@@ -7,6 +7,4 @@ coverage:
         project: off
         patch: off
 
-comment:
-    layout: "diff"
-    require_changes: yes
+comment: off
