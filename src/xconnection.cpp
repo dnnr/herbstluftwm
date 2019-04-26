@@ -66,7 +66,7 @@ int xerror(Display *dpy, XErrorEvent *ee) {
     }
     std::cerr << "herbstluftwm: fatal error:"
               << " request code=" << static_cast<int>(ee->request_code)
-              << ", error code=" << static_cast<int>(ee->error_code) << "\n";
+              << ", error code=" << static_cast<int>(ee->error_code) << std::endl;
     if (ee->error_code == BadDrawable) {
         HSDebug("Warning: ignoring X_BadDrawable");
         return 0;

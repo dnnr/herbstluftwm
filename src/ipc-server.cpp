@@ -32,7 +32,7 @@ bool ipc_handle_connection(Window win) {
     if (Success != Xutf8TextPropertyToTextList(g_display, &text_prop, &list_return, &count)) {
         std::cerr << "herbstluftwm: Warning: could not parse the " << HERBST_IPC_ARGS_ATOM
                   << " atom of herbstclient window 0x" << std::hex << win
-                  << " to utf8 list\n";
+                  << " to utf8 list" << std::endl;
         XFree(text_prop.value);
         return false;
     }
