@@ -105,7 +105,13 @@ if args.flake8:
     tox('-e flake8', build_dir)
 
 if args.run_tests:
-    tox('-e py37 -- -n auto --cache-clear -v -x', build_dir)
+    # Run completion tests separately in order to exclude them from the
+    # coverage analysis. (Those tests do not verify functionality but just
+    # the absence of unexpected crashes.)
+    tox('-e py36 -- -n auto --cache-clear -v -x tests/test_completion.py', build_dir)
+    sp.check_call('lcov --zerocounters --directory .', shell=True, cwd=build_dir)
+
+    tox('-e py36 -- -n auto --cache-clear -v -x --ignore=tests/test_completion.py', build_dir)
 
     sp.check_call('lcov --capture --directory . --output-file coverage.info', shell=True, cwd=build_dir)
     sp.check_call('lcov --remove coverage.info "/usr/*" --output-file coverage.info', shell=True, cwd=build_dir)
