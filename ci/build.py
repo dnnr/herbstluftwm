@@ -5,7 +5,26 @@ import os
 import re
 import subprocess as sp
 import sys
+import time
+import datetime
 from pathlib import Path
+
+
+def check_call_timed(*args, **kwargs):
+    """
+    Wrapper around subprocess.check_call, but with time measurement
+    """
+    start_time = time.perf_counter()
+    ret = sp.check_call(*args, **kwargs)
+    end_time = time.perf_counter()
+    duration = datetime.timedelta(seconds=end_time - start_time)
+
+    label = args[0]
+    if not isinstance(label, str):
+        label = label[0]
+    print(f'Duration for {label}: {duration}')
+
+    return ret
 
 
 def tox(tox_args, build_dir):
@@ -14,19 +33,21 @@ def tox(tox_args, build_dir):
     """
     tox_env = os.environ.copy()
     tox_env['PWD'] = build_dir
-    sp.check_call(f'tox {tox_args}', shell=True, cwd=build_dir, env=tox_env)
+    check_call_timed(f'tox {tox_args}', shell=True, cwd=build_dir, env=tox_env)
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--build-dir', type=str, required=True)
 parser.add_argument('--build-type', type=str, choices=('Release', 'Debug'), required=True)
 parser.add_argument('--compile', action='store_true')
+parser.add_argument('--unity-build', action='store_true')
 parser.add_argument('--run-tests', action='store_true')
 parser.add_argument('--build-docs', action='store_true')
 parser.add_argument('--cxx', type=str)
 parser.add_argument('--cc', type=str)
 parser.add_argument('--check-using-std', action='store_true')
 parser.add_argument('--iwyu', action='store_true')
+parser.add_argument('--clang-tidy', action='store_true')
 parser.add_argument('--flake8', action='store_true')
 parser.add_argument('--ccache', nargs='?', metavar='ccache dir', type=str,
                     const=os.environ.get('CCACHE_DIR') or True)
@@ -37,7 +58,7 @@ build_dir = Path(args.build_dir)
 build_dir.mkdir(exist_ok=True)
 
 if args.check_using_std:
-    sp.check_call(['./ci/check-using-std.sh'], cwd=repo)
+    check_call(['./ci/check-using-std.sh'], cwd=repo)
 
 if args.ccache:
     if args.ccache is not True:
@@ -63,15 +84,6 @@ build_env.update({
     'CXX': args.cxx,
     'CFLAGS': '--coverage -Werror -fsanitize=address,leak,undefined',
     'CXXFLAGS': '--coverage -Werror -fsanitize=address,leak,undefined',
-
-    # Hash-verifying the compiler is required when building with
-    # clang-and-tidy.sh (because the script's mtime is not stable) and for
-    # other cases, the overhead is minimal):
-    'CCACHE_COMPILERCHECK': 'content',
-
-    # In case clang-and-tidy.sh is used for building, it will need this to call
-    # clang-tidy:
-    'CLANG_TIDY_BUILD_DIR': str(build_dir),
 })
 
 cmake_args = [
@@ -82,10 +94,17 @@ cmake_args = [
     f'-DENABLE_CCACHE={"YES" if args.ccache else "NO"}',
 ]
 
-sp.check_call(['cmake', *cmake_args, repo], cwd=build_dir, env=build_env)
+if args.unity_build:
+    cmake_args += [
+    '-DCMAKE_UNITY_BUILD=ON',
+    '-DCMAKE_UNITY_BUILD_BATCH_SIZE=0',
+    ]
+
+check_call_timed(['cmake', *cmake_args, repo], cwd=build_dir, env=build_env)
+sp.run('echo $(grep \'"command"\' compile_commands.json|wc -l) compile commands generated', shell=True, cwd=build_dir)
 
 if args.compile:
-    sp.check_call(['bash', '-c', 'time ninja -v -k 10'], cwd=build_dir, env=build_env)
+    check_call_timed(['bash', '-c', 'ninja -v -k 10'], cwd=build_dir, env=build_env)
 
 if args.ccache:
     sp.check_call(['ccache', '-s'])
@@ -119,6 +138,13 @@ if args.iwyu:
         print("additional forward declarations to make it build again.")
         print("")
         sys.exit(1)
+
+if args.clang_tidy:
+    check_call_timed(f'python3 /usr/lib/llvm-10/share/clang/run-clang-tidy.py -extra-arg=-Wno-unknown-warning-option -header-filter=^{repo}/.* {repo}',
+                  shell=True,
+                  cwd=build_dir,
+                  stderr=sp.PIPE,
+                  )
 
 if args.flake8:
     tox('-e flake8', build_dir)
