@@ -21,6 +21,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--build-dir', type=str, required=True)
 parser.add_argument('--build-type', type=str, choices=('Release', 'Debug'), required=True)
 parser.add_argument('--compile', action='store_true')
+parser.add_argument('--unity-build', action='store_true')
 parser.add_argument('--run-tests', action='store_true')
 parser.add_argument('--build-docs', action='store_true')
 parser.add_argument('--cxx', type=str)
@@ -74,10 +75,16 @@ cmake_args = [
     f'-DENABLE_CCACHE={"YES" if args.ccache else "NO"}',
 ]
 
+if args.unity_build:
+    cmake_args += [
+    '-DCMAKE_UNITY_BUILD=ON',
+    '-DCMAKE_UNITY_BUILD_BATCH_SIZE=0',
+    ]
+
 sp.check_call(['cmake', *cmake_args, repo], cwd=build_dir, env=build_env)
 
 if args.compile:
-    sp.check_call(['bash', '-c', 'time ninja -v -k 10'], cwd=build_dir, env=build_env)
+    sp.check_call(['bash', '-c', 'time ninja -j2 -v -k 10'], cwd=build_dir, env=build_env)
 
 if args.ccache:
     sp.check_call(['ccache', '-s'])

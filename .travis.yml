@@ -28,7 +28,12 @@ jobs:
                 --volume=/etc/passwd:/etc/passwd:ro
                 --volume=$PWD:/hlwm:rw
                 focal bash -c '
+                    set -o errexit;
                     for i in {0..0}; do
-                      time /hlwm/ci/build.py --build-dir=/hlwm/build-clang-10 --cxx=clang++-10 --cc=clang-10 --build-type=Debug --clang-tidy >/dev/null;
+                      time /hlwm/ci/build.py --build-dir=/hlwm/build --cxx=clang++-10 --cc=clang-10 --build-type=Debug --clang-tidy >/dev/null;
+                    done;
+                    rm -rf /hlwm/build;
+                    for i in {0..0}; do
+                      time /hlwm/ci/build.py --build-dir=/hlwm/build --cxx=clang++-10 --cc=clang-10 --build-type=Debug --unity-build --clang-tidy >/dev/null;
                     done
                 '
