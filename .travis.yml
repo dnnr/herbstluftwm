@@ -31,9 +31,10 @@ jobs:
                     set -o errexit;
                     for i in {0..1}; do
                       time /hlwm/ci/build.py --build-dir=/hlwm/build --cxx=clang++-10 --cc=clang-10 --build-type=Debug --clang-tidy >/dev/null;
+                      rm -rf /hlwm/build;
                     done;
-                    rm -rf /hlwm/build;
                     for i in {0..1}; do
                       time /hlwm/ci/build.py --build-dir=/hlwm/build --cxx=clang++-10 --cc=clang-10 --build-type=Debug --unity-build --clang-tidy >/dev/null;
+                      rm -rf /hlwm/build;
                     done
                 '
