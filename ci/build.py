@@ -5,7 +5,26 @@ import os
 import re
 import subprocess as sp
 import sys
+import time
+import datetime
 from pathlib import Path
+
+
+def check_call_timed(*args, **kwargs):
+    """
+    Wrapper around subprocess.check_call, but with time measurement
+    """
+    start_time = time.perf_counter()
+    ret = sp.check_call(*args, **kwargs)
+    end_time = time.perf_counter()
+    duration = datetime.timedelta(seconds=end_time - start_time)
+
+    label = args[0]
+    if not isinstance(label, str):
+        label = label[0]
+    print(f'Duration for {label}: {duration}')
+
+    return ret
 
 
 def tox(tox_args, build_dir):
@@ -14,7 +33,7 @@ def tox(tox_args, build_dir):
     """
     tox_env = os.environ.copy()
     tox_env['PWD'] = build_dir
-    sp.check_call(f'tox {tox_args}', shell=True, cwd=build_dir, env=tox_env)
+    check_call_timed(f'tox {tox_args}', shell=True, cwd=build_dir, env=tox_env)
 
 
 parser = argparse.ArgumentParser()
@@ -39,7 +58,7 @@ build_dir = Path(args.build_dir)
 build_dir.mkdir(exist_ok=True)
 
 if args.check_using_std:
-    sp.check_call(['./ci/check-using-std.sh'], cwd=repo)
+    check_call(['./ci/check-using-std.sh'], cwd=repo)
 
 if args.ccache:
     if args.ccache is not True:
@@ -81,10 +100,10 @@ if args.unity_build:
     '-DCMAKE_UNITY_BUILD_BATCH_SIZE=0',
     ]
 
-sp.check_call(['cmake', *cmake_args, repo], cwd=build_dir, env=build_env)
+check_call_timed(['cmake', *cmake_args, repo], cwd=build_dir, env=build_env)
 
 if args.compile:
-    sp.check_call(['bash', '-c', 'time ninja -j2 -v -k 10'], cwd=build_dir, env=build_env)
+    check_call_timed(['bash', '-c', 'ninja -v -k 10'], cwd=build_dir, env=build_env)
 
 if args.ccache:
     sp.check_call(['ccache', '-s'])
