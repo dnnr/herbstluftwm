@@ -115,7 +115,9 @@ if args.iwyu:
 if args.clang_tidy:
     sp.check_call(f'python3 /usr/lib/llvm-10/share/clang/run-clang-tidy.py -extra-arg=-Wno-unknown-warning-option -header-filter=^{repo}/.* {repo}',
                   shell=True,
-                  cwd=build_dir)
+                  cwd=build_dir,
+                  stderr=sp.STDOUT
+                  )
 
 if args.flake8:
     tox('-e flake8', build_dir)
