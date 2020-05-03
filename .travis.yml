@@ -30,11 +30,11 @@ jobs:
                 focal bash -c '
                     set -o errexit;
                     for i in {1..5}; do
-                      time /hlwm/ci/build.py --build-dir=/hlwm/build --cxx=clang++-10 --cc=clang-10 --build-type=Debug --clang-tidy >/dev/null;
+                      time /hlwm/ci/build.py --build-dir=/hlwm/build --cxx=clang++-10 --cc=clang-10 --build-type=Debug --clang-tidy;
                       rm -rf /hlwm/build;
                     done;
                     for i in {1..5}; do
-                      time /hlwm/ci/build.py --build-dir=/hlwm/build --cxx=clang++-10 --cc=clang-10 --build-type=Debug --unity-build --clang-tidy >/dev/null;
+                      time /hlwm/ci/build.py --build-dir=/hlwm/build --cxx=clang++-10 --cc=clang-10 --build-type=Debug --unity-build --clang-tidy;
                       rm -rf /hlwm/build;
                     done
                 '

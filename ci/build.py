@@ -140,10 +140,10 @@ if args.iwyu:
         sys.exit(1)
 
 if args.clang_tidy:
-    sp.check_call(f'python3 /usr/lib/llvm-10/share/clang/run-clang-tidy.py -extra-arg=-Wno-unknown-warning-option -header-filter=^{repo}/.* {repo}',
+    check_call_timed(f'python3 /usr/lib/llvm-10/share/clang/run-clang-tidy.py -extra-arg=-Wno-unknown-warning-option -header-filter=^{repo}/.* {repo}',
                   shell=True,
                   cwd=build_dir,
-                  stderr=sp.STDOUT
+                  stderr=sp.PIPE,
                   )
 
 if args.flake8:
