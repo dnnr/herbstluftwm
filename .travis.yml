@@ -29,6 +29,6 @@ jobs:
                 --volume=$PWD:/hlwm:rw
                 focal sh -c '
                     for i in {0..0}; do
-                      time /hlwm/ci/build.py --build-dir=/hlwm/build-clang-10 --cxx=clang++-10 --cc=clang-10 --build-type=Debug --clang-tidy
+                      time /hlwm/ci/build.py --build-dir=/hlwm/build-clang-10 --cxx=clang++-10 --cc=clang-10 --build-type=Debug --clang-tidy >/dev/null
                     done
                 '
