@@ -101,6 +101,7 @@ if args.unity_build:
     ]
 
 check_call_timed(['cmake', *cmake_args, repo], cwd=build_dir, env=build_env)
+sp.run('echo $(grep \'"command"\' compile_commands.json) compile commands generated', shell=True, cwd=build_dir)
 
 if args.compile:
     check_call_timed(['bash', '-c', 'ninja -v -k 10'], cwd=build_dir, env=build_env)
